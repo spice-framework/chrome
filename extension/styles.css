@@ -1,0 +1,127 @@
+:root {
+  --spice-prefix: var(--color-prettylights-syntax-comment, #6e7781);
+  --spice-sigil: var(--color-prettylights-syntax-comment, #6e7781);
+  --spice-namespace: var(--color-prettylights-syntax-entity, #8250df);
+  --spice-annotation: var(--color-prettylights-syntax-keyword, #cf222e);
+  --spice-parameter: var(--color-prettylights-syntax-variable, #953800);
+  --spice-importSymbol: var(--color-prettylights-syntax-keyword, #cf222e);
+  --spice-importAlias: var(--color-prettylights-syntax-entity, #8250df);
+  --spice-typeReference: var(--color-prettylights-syntax-entity, #8250df);
+  --spice-string: var(--color-prettylights-syntax-string, #0a3069);
+  --spice-number: var(--color-prettylights-syntax-constant, #0550ae);
+  --spice-boolean: var(--color-prettylights-syntax-constant, #0550ae);
+  --spice-identifier: var(--fgColor-default, #1f2328);
+  --spice-keyword: var(--color-prettylights-syntax-keyword, #cf222e);
+  --spice-operator: var(--fgColor-muted, #656d76);
+  --spice-badgeAccent: #d9772b;
+}
+
+.spice-custom-theme {
+  --spice-prefix: var(--spice-custom-prefix);
+  --spice-sigil: var(--spice-custom-sigil);
+  --spice-namespace: var(--spice-custom-namespace);
+  --spice-annotation: var(--spice-custom-annotation);
+  --spice-parameter: var(--spice-custom-parameter);
+  --spice-importSymbol: var(--spice-custom-importSymbol);
+  --spice-importAlias: var(--spice-custom-importAlias);
+  --spice-typeReference: var(--spice-custom-typeReference);
+  --spice-string: var(--spice-custom-string);
+  --spice-number: var(--spice-custom-number);
+  --spice-boolean: var(--spice-custom-boolean);
+  --spice-identifier: var(--spice-custom-identifier);
+  --spice-keyword: var(--spice-custom-keyword);
+  --spice-operator: var(--spice-custom-operator);
+  --spice-badgeAccent: var(--spice-custom-badgeAccent);
+}
+
+[data-spice-token="PREFIX"] {
+  color: var(--spice-prefix) !important;
+}
+
+[data-spice-token="SIGIL"] {
+  color: var(--spice-sigil) !important;
+}
+
+[data-spice-token="NAMESPACE"] {
+  color: var(--spice-namespace) !important;
+}
+
+[data-spice-token="ANNOTATION"] {
+  color: var(--spice-annotation) !important;
+  font-weight: 600;
+}
+
+[data-spice-token="PARAMETER"] {
+  color: var(--spice-parameter) !important;
+}
+
+[data-spice-token="IMPORT_SYMBOL"] {
+  color: var(--spice-importSymbol) !important;
+}
+
+[data-spice-token="IMPORT_ALIAS"] {
+  color: var(--spice-importAlias) !important;
+}
+
+[data-spice-token="TYPE_REFERENCE"] {
+  color: var(--spice-typeReference) !important;
+}
+
+[data-spice-token="STRING"] {
+  color: var(--spice-string) !important;
+}
+
+[data-spice-token="NUMBER"] {
+  color: var(--spice-number) !important;
+}
+
+[data-spice-token="BOOLEAN"] {
+  color: var(--spice-boolean) !important;
+}
+
+[data-spice-token="IDENTIFIER"] {
+  color: var(--spice-identifier) !important;
+}
+
+[data-spice-token="KEYWORD"] {
+  color: var(--spice-keyword) !important;
+  font-weight: 600;
+}
+
+[data-spice-token="OPERATOR"] {
+  color: var(--spice-operator) !important;
+}
+
+.spice-conceal-prefix .spice-source-prefix {
+  font-size: 0 !important;
+  line-height: 0 !important;
+}
+
+.spice-file-badge {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  gap: 5px;
+  min-height: 24px;
+  box-sizing: border-box;
+  margin-inline-start: 8px;
+  padding: 2px 8px 2px 5px;
+  color: var(--fgColor-default, #1f2328);
+  background: color-mix(
+    in srgb,
+    var(--spice-badgeAccent) 13%,
+    var(--bgColor-default, #ffffff)
+  );
+  border: 1px solid
+    color-mix(in srgb, var(--spice-badgeAccent) 52%, transparent);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+  vertical-align: middle;
+}
+
+.spice-file-badge img {
+  display: block;
+  border-radius: 4px;
+}

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>main.go · spice-framework/petclinic</title>
+    <style>
+      :root {
+        --color-prettylights-syntax-comment: #8b949e;
+        --color-prettylights-syntax-constant: #79c0ff;
+        --color-prettylights-syntax-entity: #d2a8ff;
+        --color-prettylights-syntax-keyword: #ff7b72;
+        --color-prettylights-syntax-string: #a5d6ff;
+        --color-prettylights-syntax-variable: #ffa657;
+        --fgColor-default: #f0f6fc;
+        --fgColor-muted: #8b949e;
+        --bgColor-default: #0d1117;
+      }
+
+      body {
+        margin: 30px;
+        color: var(--fgColor-default);
+        background: var(--bgColor-default);
+        font: 14px system-ui;
+      }
+
+      [data-testid="blob-header"] {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        border: 1px solid #30363d;
+      }
+
+      .react-code-lines {
+        padding: 16px;
+        border: 1px solid #30363d;
+        font:
+          14px/1.6 "Cascadia Code",
+          monospace;
+        white-space: pre;
+      }
+    </style>
+  </head>
+  <body>
+    <section>
+      <h2 data-testid="screen-reader-heading">File metadata and controls</h2>
+      <div data-testid="blob-header">
+        <div data-testid="blob-header-content"><strong>main.go</strong></div>
+        <div>Actions</div>
+      </div>
+      <div class="react-code-file-contents">
+        <div class="react-code-lines">
+          <div id="LC1" class="react-file-line">package main</div>
+          <div id="LC2" class="react-file-line"></div>
+          <!-- prettier-ignore -->
+          <div id="LC3" class="react-file-line"><span class="pl-c">// @import { Application } from "github.com/spice-framework/spice/pkg/app"</span></div>
+          <!-- prettier-ignore -->
+          <div id="LC4" class="react-file-line"><span class="pl-c">// @Application</span></div>
+          <!-- prettier-ignore -->
+          <div id="LC5" class="react-file-line"><span class="pl-c">// @management.Enable(expose=["health"], access="loopback", retries=-1)</span></div>
+          <!-- prettier-ignore -->
+          <div id="LC6" class="react-file-line"><span class="pl-c">// @Implements(payments.Processor, health.Checker)</span></div>
+          <!-- prettier-ignore -->
+          <div id="LC7" class="react-file-line"><span class="pl-c">// ordinary @Application text</span></div>
+          <!-- prettier-ignore -->
+          <div id="LC8" class="react-file-line"><span class="pl-c">//@Application</span></div>
+          <div id="LC9" class="react-file-line">func main() {}</div>
+        </div>
+      </div>
+      <textarea
+        data-testid="read-only-cursor-text-area"
+        aria-label="file content"
+      >
+package main
+
+// @import { Application } from "github.com/spice-framework/spice/pkg/app"
+// @Application
+// @management.Enable(expose=["health"], access="loopback", retries=-1)
+// @Implements(payments.Processor, health.Checker)
+// ordinary @Application text
+//@Application
+func main() {}</textarea>
+    </section>
+  </body>
+</html>

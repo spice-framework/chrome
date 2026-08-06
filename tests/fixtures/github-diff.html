@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Files changed · spice-framework/petclinic</title>
+    <style>
+      :root {
+        --color-prettylights-syntax-comment: #8b949e;
+        --color-prettylights-syntax-entity: #d2a8ff;
+        --color-prettylights-syntax-keyword: #ff7b72;
+        --fgColor-default: #f0f6fc;
+        --fgColor-muted: #8b949e;
+        --bgColor-default: #0d1117;
+      }
+
+      body {
+        color: var(--fgColor-default);
+        background: var(--bgColor-default);
+        font: 14px system-ui;
+      }
+
+      .js-file {
+        margin: 20px;
+        border: 1px solid #30363d;
+      }
+
+      .file-header,
+      td {
+        padding: 10px;
+      }
+
+      .file-info {
+        display: flex;
+        align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="js-file" data-path="main.go">
+      <div class="file-header"><span class="file-info">main.go</span></div>
+      <table>
+        <tbody>
+          <tr>
+            <!-- prettier-ignore -->
+            <td id="diff-go" class="blob-code"><span class="pl-c">// @Application</span></td>
+          </tr>
+          <tr>
+            <!-- prettier-ignore -->
+            <td id="diff-comment" class="blob-code"><span class="pl-c">// ordinary @Application text</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="js-file" data-path="README.md">
+      <div class="file-header"><span class="file-info">README.md</span></div>
+      <table>
+        <tbody>
+          <tr>
+            <!-- prettier-ignore -->
+            <td id="diff-markdown" class="blob-code">// @Application</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

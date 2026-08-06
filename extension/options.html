@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Spice for GitHub settings</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main>
+      <header class="hero">
+        <img
+          src="assets/logo-128.png"
+          width="88"
+          height="88"
+          alt="Spice logo"
+        />
+        <div>
+          <p class="eyebrow">SPICE FOR GITHUB</p>
+          <h1>Native-looking Spice code.</h1>
+          <p class="lede">
+            Keep every Go source byte intact while making Spice declarations
+            feel at home on GitHub.
+          </p>
+        </div>
+      </header>
+
+      <form id="settings-form">
+        <section class="card">
+          <div>
+            <h2>Presentation</h2>
+            <p>Choose how declarations appear in GitHub file and diff views.</p>
+          </div>
+          <label class="toggle-row">
+            <span>
+              <strong>Fold the comment prefix</strong>
+              <small
+                >Visually hide <code>// </code>; copying still includes
+                it.</small
+              >
+            </span>
+            <input id="conceal-prefix" type="checkbox" />
+          </label>
+          <fieldset>
+            <legend>Color theme</legend>
+            <label class="choice">
+              <input type="radio" name="theme" value="github" />
+              <span
+                ><strong>Follow GitHub</strong
+                ><small
+                  >Uses GitHub's active light or dark syntax palette.</small
+                ></span
+              >
+            </label>
+            <label class="choice">
+              <input type="radio" name="theme" value="custom" />
+              <span
+                ><strong>Custom palette</strong
+                ><small>Use the semantic colors below.</small></span
+              >
+            </label>
+          </fieldset>
+        </section>
+
+        <section class="card preview-card">
+          <div>
+            <h2>Live preview</h2>
+            <p>The source remains valid Go beneath this presentation.</p>
+          </div>
+          <pre><code id="preview"></code></pre>
+        </section>
+
+        <section class="card">
+          <div>
+            <h2>Semantic colors</h2>
+            <p>Mirrors the token categories used by the Spice GoLand plugin.</p>
+          </div>
+          <div id="color-grid" class="color-grid"></div>
+        </section>
+
+        <footer>
+          <span id="status" role="status" aria-live="polite"></span>
+          <div>
+            <button id="reset" class="secondary" type="button">
+              Reset defaults
+            </button>
+            <button type="submit">Save settings</button>
+          </div>
+        </footer>
+      </form>
+    </main>
+    <script src="spice-syntax.js"></script>
+    <script src="settings.js"></script>
+    <script src="options.js"></script>
+  </body>
+</html>

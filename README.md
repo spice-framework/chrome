@@ -1,0 +1,54 @@
+# Spice for GitHub
+
+Spice for GitHub makes valid [Spice](https://github.com/spice-framework/spice) declaration comments read like native language annotations on GitHub. It visually folds the `// ` prefix, restores semantic syntax highlighting, and adds the Spice logo to every detected Spice file.
+
+The source is never rewritten. Copying a declaration still produces valid Go such as `// @Application`, raw views stay unchanged, and GitHub's own review data remains authoritative.
+
+![Spice declarations rendered natively on GitHub](docs/images/spice-for-github.png)
+
+## What it does
+
+- Recognizes only canonical declaration comments beginning with exactly `// @`.
+- Mirrors the Spice GoLand plugin's semantic categories: annotations, namespaces, directive keywords, imported symbols and aliases, argument names, type references, strings, numbers, booleans, identifiers, and punctuation.
+- Follows GitHub's light or dark syntax palette automatically, with a complete custom-color settings page.
+- Marks detected files with a compact **Spice file** badge and the project logo.
+- Handles GitHub file views, pull-request diffs, and client-side navigation without duplicating rendered content.
+- Requests only Chrome's `storage` permission. There is no telemetry, remote code, or network request from the extension.
+
+## Install locally
+
+1. Download or build the unpacked extension.
+2. Open `chrome://extensions` in Google Chrome.
+3. Enable **Developer mode**.
+4. Choose **Load unpacked** and select `build/unpacked`.
+5. Open a `.go` file containing canonical Spice declarations on GitHub.
+
+Open the extension's **Details → Extension options** to change prefix folding or semantic colors.
+
+## Build and verify
+
+Requires Node.js 22.13+ or Node.js 24+ on an even-numbered LTS release.
+
+```console
+npm ci
+npx playwright install chromium
+npm run verify
+npm run test:live
+```
+
+`npm run verify` formats and lints the repository, validates least-privilege Manifest V3 packaging, runs parser/settings tests, creates a deterministic ZIP, and exercises the installed extension in Chromium. `npm run test:live` is the explicit smoke test against GitHub's current production DOM.
+
+Build outputs:
+
+- `build/unpacked` — load directly in Chrome.
+- `build/spice-for-github-v0.1.0.zip` — deterministic release package.
+
+## Source-integrity contract
+
+The renderer replaces only the visual children of GitHub code-line elements and immediately verifies that each line's `textContent` is identical to its original value. The folded `// ` remains in the DOM as selectable text, and GitHub's raw-source textarea is never touched. Noncanonical comments—including `//@Application` and ordinary prose containing `@`—are ignored.
+
+See [Privacy](docs/privacy.md), [Contributing](CONTRIBUTING.md), and [Security](SECURITY.md) for the project policies.
+
+## License
+
+Apache License 2.0.
