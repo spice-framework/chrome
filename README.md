@@ -1,5 +1,7 @@
 # Spice for GitHub
 
+Unified documentation: [spiceframework.dev/tools/github-extension](https://spiceframework.dev/tools/github-extension/).
+
 Spice for GitHub makes valid [Spice](https://github.com/spice-framework/spice) declaration comments read like native language annotations on GitHub. It visually folds the `// ` prefix, restores semantic syntax highlighting, and adds an icon-only Spice link beside GitHub's file actions for every detected Spice file.
 
 The source is never rewritten. Copying a declaration still produces valid Go such as `// @Application`, raw views stay unchanged, and GitHub's own review data remains authoritative.
