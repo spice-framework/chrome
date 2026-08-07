@@ -1,0 +1,253 @@
+{
+  "schema": 1,
+  "cases": [
+    {
+      "id": "named-import",
+      "source": "// @import { Application, Service } from \"github.com/spice-framework/spice/annotation/core\"",
+      "annotation": null,
+      "import": {
+        "packagePath": "github.com/spice-framework/spice/annotation/core",
+        "packageRange": [42, 90],
+        "bindings": [
+          {
+            "importedName": "Application",
+            "importedRange": [13, 24],
+            "localName": "Application",
+            "localRange": [13, 24],
+            "namespace": false
+          },
+          {
+            "importedName": "Service",
+            "importedRange": [26, 33],
+            "localName": "Service",
+            "localRange": [26, 33],
+            "namespace": false
+          }
+        ]
+      },
+      "tokens": [
+        { "kind": "PREFIX", "start": 0, "end": 3, "text": "// " },
+        { "kind": "SIGIL", "start": 3, "end": 4, "text": "@" },
+        { "kind": "KEYWORD", "start": 4, "end": 10, "text": "import" },
+        { "kind": "OPERATOR", "start": 11, "end": 12, "text": "{" },
+        {
+          "kind": "IMPORT_SYMBOL",
+          "start": 13,
+          "end": 24,
+          "text": "Application"
+        },
+        { "kind": "OPERATOR", "start": 24, "end": 25, "text": "," },
+        { "kind": "IMPORT_SYMBOL", "start": 26, "end": 33, "text": "Service" },
+        { "kind": "OPERATOR", "start": 34, "end": 35, "text": "}" },
+        { "kind": "KEYWORD", "start": 36, "end": 40, "text": "from" },
+        {
+          "kind": "STRING",
+          "start": 41,
+          "end": 91,
+          "text": "\"github.com/spice-framework/spice/annotation/core\""
+        }
+      ],
+      "concealment": [0, 3]
+    },
+    {
+      "id": "alias-import",
+      "source": "// @import { Controller as WebController } from \"github.com/spice-framework/spice/annotation/web\"",
+      "annotation": null,
+      "import": {
+        "packagePath": "github.com/spice-framework/spice/annotation/web",
+        "packageRange": [49, 96],
+        "bindings": [
+          {
+            "importedName": "Controller",
+            "importedRange": [13, 23],
+            "localName": "WebController",
+            "localRange": [27, 40],
+            "namespace": false
+          }
+        ]
+      },
+      "tokens": [
+        { "kind": "PREFIX", "start": 0, "end": 3, "text": "// " },
+        { "kind": "SIGIL", "start": 3, "end": 4, "text": "@" },
+        { "kind": "KEYWORD", "start": 4, "end": 10, "text": "import" },
+        { "kind": "OPERATOR", "start": 11, "end": 12, "text": "{" },
+        {
+          "kind": "IMPORT_SYMBOL",
+          "start": 13,
+          "end": 23,
+          "text": "Controller"
+        },
+        { "kind": "KEYWORD", "start": 24, "end": 26, "text": "as" },
+        {
+          "kind": "IMPORT_ALIAS",
+          "start": 27,
+          "end": 40,
+          "text": "WebController"
+        },
+        { "kind": "OPERATOR", "start": 41, "end": 42, "text": "}" },
+        { "kind": "KEYWORD", "start": 43, "end": 47, "text": "from" },
+        {
+          "kind": "STRING",
+          "start": 48,
+          "end": 97,
+          "text": "\"github.com/spice-framework/spice/annotation/web\""
+        }
+      ],
+      "concealment": [0, 3]
+    },
+    {
+      "id": "namespace-import",
+      "source": "// @import * as web from \"github.com/spice-framework/spice/annotation/web\"",
+      "annotation": null,
+      "import": {
+        "packagePath": "github.com/spice-framework/spice/annotation/web",
+        "packageRange": [26, 73],
+        "bindings": [
+          {
+            "importedName": "",
+            "importedRange": [0, 0],
+            "localName": "web",
+            "localRange": [16, 19],
+            "namespace": true
+          }
+        ]
+      },
+      "tokens": [
+        { "kind": "PREFIX", "start": 0, "end": 3, "text": "// " },
+        { "kind": "SIGIL", "start": 3, "end": 4, "text": "@" },
+        { "kind": "KEYWORD", "start": 4, "end": 10, "text": "import" },
+        { "kind": "OPERATOR", "start": 11, "end": 12, "text": "*" },
+        { "kind": "KEYWORD", "start": 13, "end": 15, "text": "as" },
+        { "kind": "NAMESPACE", "start": 16, "end": 19, "text": "web" },
+        { "kind": "KEYWORD", "start": 20, "end": 24, "text": "from" },
+        {
+          "kind": "STRING",
+          "start": 25,
+          "end": 74,
+          "text": "\"github.com/spice-framework/spice/annotation/web\""
+        }
+      ],
+      "concealment": [0, 3]
+    },
+    {
+      "id": "qualified-values",
+      "source": "// @management.Enable(expose=[\"health\"], access=\"loopback\", retries=-1, enabled=true, check=health.Checker, empty=nil)",
+      "annotation": {
+        "name": "management.Enable",
+        "prefixRange": [0, 3],
+        "referenceRange": [3, 21]
+      },
+      "import": null,
+      "tokens": [
+        { "kind": "PREFIX", "start": 0, "end": 3, "text": "// " },
+        { "kind": "SIGIL", "start": 3, "end": 4, "text": "@" },
+        { "kind": "NAMESPACE", "start": 4, "end": 14, "text": "management" },
+        { "kind": "OPERATOR", "start": 14, "end": 15, "text": "." },
+        { "kind": "ANNOTATION", "start": 15, "end": 21, "text": "Enable" },
+        { "kind": "OPERATOR", "start": 21, "end": 22, "text": "(" },
+        { "kind": "PARAMETER", "start": 22, "end": 28, "text": "expose" },
+        { "kind": "OPERATOR", "start": 28, "end": 29, "text": "=" },
+        { "kind": "OPERATOR", "start": 29, "end": 30, "text": "[" },
+        { "kind": "STRING", "start": 30, "end": 38, "text": "\"health\"" },
+        { "kind": "OPERATOR", "start": 38, "end": 39, "text": "]" },
+        { "kind": "OPERATOR", "start": 39, "end": 40, "text": "," },
+        { "kind": "PARAMETER", "start": 41, "end": 47, "text": "access" },
+        { "kind": "OPERATOR", "start": 47, "end": 48, "text": "=" },
+        { "kind": "STRING", "start": 48, "end": 58, "text": "\"loopback\"" },
+        { "kind": "OPERATOR", "start": 58, "end": 59, "text": "," },
+        { "kind": "PARAMETER", "start": 60, "end": 67, "text": "retries" },
+        { "kind": "OPERATOR", "start": 67, "end": 68, "text": "=" },
+        { "kind": "NUMBER", "start": 68, "end": 70, "text": "-1" },
+        { "kind": "OPERATOR", "start": 70, "end": 71, "text": "," },
+        { "kind": "PARAMETER", "start": 72, "end": 79, "text": "enabled" },
+        { "kind": "OPERATOR", "start": 79, "end": 80, "text": "=" },
+        { "kind": "BOOLEAN", "start": 80, "end": 84, "text": "true" },
+        { "kind": "OPERATOR", "start": 84, "end": 85, "text": "," },
+        { "kind": "PARAMETER", "start": 86, "end": 91, "text": "check" },
+        { "kind": "OPERATOR", "start": 91, "end": 92, "text": "=" },
+        { "kind": "NAMESPACE", "start": 92, "end": 98, "text": "health" },
+        { "kind": "OPERATOR", "start": 98, "end": 99, "text": "." },
+        {
+          "kind": "TYPE_REFERENCE",
+          "start": 99,
+          "end": 106,
+          "text": "Checker"
+        },
+        { "kind": "OPERATOR", "start": 106, "end": 107, "text": "," },
+        { "kind": "PARAMETER", "start": 108, "end": 113, "text": "empty" },
+        { "kind": "OPERATOR", "start": 113, "end": 114, "text": "=" },
+        { "kind": "BOOLEAN", "start": 114, "end": 117, "text": "nil" },
+        { "kind": "OPERATOR", "start": 117, "end": 118, "text": ")" }
+      ],
+      "concealment": [0, 3]
+    },
+    {
+      "id": "canonical-spacing",
+      "source": "// @Application",
+      "annotation": {
+        "name": "Application",
+        "prefixRange": [0, 3],
+        "referenceRange": [3, 15]
+      },
+      "import": null,
+      "tokens": [
+        { "kind": "PREFIX", "start": 0, "end": 3, "text": "// " },
+        { "kind": "SIGIL", "start": 3, "end": 4, "text": "@" },
+        { "kind": "ANNOTATION", "start": 4, "end": 15, "text": "Application" }
+      ],
+      "concealment": [0, 3]
+    },
+    {
+      "id": "noncanonical-spacing",
+      "source": "//  @Application",
+      "annotation": null,
+      "import": null,
+      "tokens": [],
+      "concealment": null
+    },
+    {
+      "id": "malformed-string",
+      "source": "// @Application(name=\"unterminated)",
+      "annotation": {
+        "name": "Application",
+        "prefixRange": [0, 3],
+        "referenceRange": [3, 15]
+      },
+      "import": null,
+      "tokens": [
+        { "kind": "PREFIX", "start": 0, "end": 3, "text": "// " },
+        { "kind": "SIGIL", "start": 3, "end": 4, "text": "@" },
+        { "kind": "ANNOTATION", "start": 4, "end": 15, "text": "Application" },
+        { "kind": "OPERATOR", "start": 15, "end": 16, "text": "(" },
+        { "kind": "PARAMETER", "start": 16, "end": 20, "text": "name" },
+        { "kind": "OPERATOR", "start": 20, "end": 21, "text": "=" },
+        { "kind": "STRING", "start": 21, "end": 35, "text": "\"unterminated)" }
+      ],
+      "concealment": [0, 3]
+    },
+    {
+      "id": "ordinary-comment",
+      "source": "// ordinary @Application text",
+      "annotation": null,
+      "import": null,
+      "tokens": [],
+      "concealment": null
+    },
+    {
+      "id": "compact-prefix",
+      "source": "//@Application",
+      "annotation": null,
+      "import": null,
+      "tokens": [],
+      "concealment": null
+    },
+    {
+      "id": "malformed-suffix",
+      "source": "// @Application trailing",
+      "annotation": null,
+      "import": null,
+      "tokens": [],
+      "concealment": null
+    }
+  ]
+}

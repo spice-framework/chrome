@@ -16,6 +16,9 @@ source, copy behavior, raw views, reviews, and Git content unchanged.
 - Semantic token categories track the Spice GoLand plugin: prefix, sigil,
   namespace, annotation, argument, imported symbol, import alias, type
   reference, string, number, Boolean, identifier, keyword, and punctuation.
+- `packages/spice-syntax` is the browser-neutral tokenizer and palette source
+  of truth. The extension artifact and build-time documentation renderer must
+  consume that package and pass the shared language-neutral fixture corpus.
 - An icon-only Spice indicator appears beside GitHub's right-side file actions
   only when at least one canonical Spice line is detected in the current Go
   file or diff. Its label is exposed through accessible and hover text, and its

@@ -1,4 +1,4 @@
-import { cp, mkdir, readdir, rm } from "node:fs/promises";
+import { copyFile, cp, mkdir, readdir, rm } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -15,5 +15,13 @@ if (!sourceEntries.includes("manifest.json")) {
 await rm(build, { recursive: true, force: true });
 await mkdir(build, { recursive: true });
 await cp(source, unpacked, { recursive: true, force: false });
+await copyFile(
+  path.join(root, "packages", "spice-syntax", "src", "index.cjs"),
+  path.join(unpacked, "spice-syntax.js"),
+);
+await copyFile(
+  path.join(root, "packages", "spice-syntax", "src", "palette.cjs"),
+  path.join(unpacked, "settings.js"),
+);
 
 console.log(`Built unpacked extension at ${unpacked}`);

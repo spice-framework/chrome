@@ -9,7 +9,7 @@ const {
   VIVID_COLORS,
   normalizeSettings,
   isColor,
-} = require("../../extension/settings.js");
+} = require("../../packages/spice-syntax/src/palette.cjs");
 
 test("defaults cover every GoLand semantic token category", () => {
   assert.deepEqual(

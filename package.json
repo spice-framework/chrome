@@ -9,6 +9,7 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs && node scripts/package.mjs",
+    "syntax:fixtures": "node scripts/generate-syntax-corpus.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint .",

@@ -9,7 +9,7 @@ const {
   parseImportDirective,
   highlightTokens,
   concealmentRange,
-} = require("../../extension/spice-syntax.js");
+} = require("../../packages/spice-syntax/src/index.cjs");
 
 test("recognizes only the exact canonical declaration prefix", () => {
   assert.equal(PREFIX, "// @");

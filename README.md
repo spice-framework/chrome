@@ -4,6 +4,8 @@ Spice for GitHub makes valid [Spice](https://github.com/spice-framework/spice) d
 
 The source is never rewritten. Copying a declaration still produces valid Go such as `// @Application`, raw views stay unchanged, and GitHub's own review data remains authoritative.
 
+The browser-neutral parser and semantic palettes live in [`packages/spice-syntax`](packages/spice-syntax). The extension build packages those exact sources, while documentation tooling can use the ESM entry without maintaining a second parser. A shared JSON corpus locks token and concealment behavior across consumers.
+
 ![Spice for GitHub dark-mode settings](store/assets/screenshot-settings-dark-1280x800.png)
 
 ![Spice declarations rendered natively on GitHub](docs/images/spice-for-github.png)

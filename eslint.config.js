@@ -31,7 +31,13 @@ module.exports = [
     },
   },
   {
-    files: ["scripts/**/*.mjs", "tests/**/*.mjs", "tests/**/*.cjs"],
+    files: [
+      "packages/**/*.mjs",
+      "packages/**/*.cjs",
+      "scripts/**/*.mjs",
+      "tests/**/*.mjs",
+      "tests/**/*.cjs",
+    ],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: "module",

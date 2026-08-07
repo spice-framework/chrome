@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const extension = path.join(root, "extension");
+const syntaxPackage = path.join(root, "packages", "spice-syntax", "src");
 const manifest = JSON.parse(
   await readFile(path.join(extension, "manifest.json"), "utf8"),
 );
@@ -53,7 +54,12 @@ const expectedFiles = new Set([
   "spice-syntax.js",
   "styles.css",
 ]);
-const actualFiles = new Set(await listFiles(extension));
+const sourceFiles = await listFiles(extension);
+const virtualFiles = new Map([
+  ["spice-syntax.js", path.join(syntaxPackage, "index.cjs")],
+  ["settings.js", path.join(syntaxPackage, "palette.cjs")],
+]);
+const actualFiles = new Set([...sourceFiles, ...virtualFiles.keys()]);
 assert.deepEqual(
   actualFiles,
   expectedFiles,
@@ -83,7 +89,10 @@ const executableFiles = [...actualFiles].filter((filename) =>
   /\.(?:html|js)$/.test(filename),
 );
 for (const filename of executableFiles) {
-  const source = await readFile(path.join(extension, filename), "utf8");
+  const source = await readFile(
+    virtualFiles.get(filename) ?? path.join(extension, filename),
+    "utf8",
+  );
   const remoteUrls = [...source.matchAll(/https?:\/\/[^\s"'`<>)]+/g)].map(
     ([url]) => url,
   );
