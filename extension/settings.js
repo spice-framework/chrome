@@ -76,21 +76,32 @@
         label: "Punctuation",
         value: "#8b949e",
       }),
-      Object.freeze({
-        key: "badgeAccent",
-        label: "Badge accent",
-        value: "#d9772b",
-      }),
     ]);
-    const DEFAULT_COLORS = Object.freeze(
+    const VIVID_COLORS = Object.freeze(
       Object.fromEntries(
         COLOR_DEFINITIONS.map(({ key, value }) => [key, value]),
       ),
     );
+    const NATIVE_PREVIEW_COLORS = Object.freeze({
+      prefix: "#8b949e",
+      sigil: "#8b949e",
+      namespace: "#c9d1d9",
+      annotation: "#d2a8ff",
+      parameter: "#c9d1d9",
+      importSymbol: "#c9d1d9",
+      importAlias: "#c9d1d9",
+      typeReference: "#c9d1d9",
+      string: "#a5d6ff",
+      number: "#79c0ff",
+      boolean: "#79c0ff",
+      identifier: "#c9d1d9",
+      keyword: "#ff7b72",
+      operator: "#8b949e",
+    });
     const DEFAULT_SETTINGS = Object.freeze({
-      theme: "github",
+      theme: "native",
       concealPrefix: true,
-      colors: DEFAULT_COLORS,
+      colors: VIVID_COLORS,
     });
 
     function normalizeSettings(candidate) {
@@ -102,8 +113,11 @@
           ? value.toLowerCase()
           : definition.value;
       }
+      const theme = ["vivid", "custom"].includes(input.theme)
+        ? input.theme
+        : "native";
       return Object.freeze({
-        theme: input.theme === "custom" ? "custom" : "github",
+        theme,
         concealPrefix: input.concealPrefix !== false,
         colors: Object.freeze(colors),
       });
@@ -116,6 +130,8 @@
     return Object.freeze({
       STORAGE_KEY,
       COLOR_DEFINITIONS,
+      NATIVE_PREVIEW_COLORS,
+      VIVID_COLORS,
       DEFAULT_SETTINGS,
       normalizeSettings,
       isColor,

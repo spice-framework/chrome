@@ -5,6 +5,8 @@ const assert = require("node:assert/strict");
 const {
   COLOR_DEFINITIONS,
   DEFAULT_SETTINGS,
+  NATIVE_PREVIEW_COLORS,
+  VIVID_COLORS,
   normalizeSettings,
   isColor,
 } = require("../../extension/settings.js");
@@ -27,11 +29,20 @@ test("defaults cover every GoLand semantic token category", () => {
       "identifier",
       "keyword",
       "operator",
-      "badgeAccent",
     ],
   );
-  assert.equal(DEFAULT_SETTINGS.theme, "github");
+  assert.equal(DEFAULT_SETTINGS.theme, "native");
   assert.equal(DEFAULT_SETTINGS.concealPrefix, true);
+  assert.equal(NATIVE_PREVIEW_COLORS.namespace, "#c9d1d9");
+  assert.equal(NATIVE_PREVIEW_COLORS.annotation, "#d2a8ff");
+  assert.equal(VIVID_COLORS.namespace, "#d2a8ff");
+  assert.equal(VIVID_COLORS.annotation, "#ff7b72");
+});
+
+test("normalization migrates the retired GitHub theme and preserves vivid", () => {
+  assert.equal(normalizeSettings({ theme: "github" }).theme, "native");
+  assert.equal(normalizeSettings({ theme: "native" }).theme, "native");
+  assert.equal(normalizeSettings({ theme: "vivid" }).theme, "vivid");
 });
 
 test("normalization accepts valid settings and repairs invalid fields", () => {

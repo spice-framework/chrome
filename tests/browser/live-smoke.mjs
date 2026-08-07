@@ -19,15 +19,26 @@ try {
     "https://github.com/spice-framework/petclinic/blob/main/main.go",
     { waitUntil: "domcontentloaded", timeout: 60_000 },
   );
-  await page.locator(".spice-file-badge").waitFor({ timeout: 30_000 });
+  await page.locator(".spice-file-indicator").waitFor({ timeout: 30_000 });
   const rendered = page.locator('[data-spice-rendered^="// @"]');
   assert(
     (await rendered.count()) > 0,
     "live GitHub page had no rendered Spice lines",
   );
   assert.match(
-    await page.locator(".spice-file-badge").getAttribute("title"),
-    /annotation/,
+    await page.locator(".spice-file-indicator").getAttribute("title"),
+    /declaration/,
+  );
+  assert.equal(
+    await page.locator(".spice-file-indicator").getAttribute("href"),
+    "https://github.com/spice-framework/spice",
+  );
+  assert.match(
+    (await page
+      .locator(".spice-file-indicator")
+      .evaluate((element) => element.nextElementSibling?.dataset.testid)) ?? "",
+    /more-file-actions|raw-button/,
+    "indicator was not placed beside the right-side file controls",
   );
   const rawSource = await page
     .locator('[data-testid="read-only-cursor-text-area"]')
@@ -37,9 +48,9 @@ try {
     "GitHub raw source control was altered",
   );
   assert.equal(
-    await page.locator(".spice-file-badge").count(),
+    await page.locator(".spice-file-indicator").count(),
     1,
-    "badge was duplicated",
+    "indicator was duplicated",
   );
   await page.screenshot({
     path: path.join(artifacts, "live-github.png"),

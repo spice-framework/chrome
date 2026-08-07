@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Spice for GitHub",
   "short_name": "Spice",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Render valid Spice declaration comments as native, highlighted annotations on GitHub.",
   "minimum_chrome_version": "111",
   "icons": {

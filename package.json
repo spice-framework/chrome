@@ -1,6 +1,6 @@
 {
   "name": "spice-for-github",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Render valid Spice declaration comments as native, highlighted annotations on GitHub.",
   "type": "commonjs",

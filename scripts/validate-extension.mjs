@@ -84,6 +84,9 @@ const executableFiles = [...actualFiles].filter((filename) =>
 );
 for (const filename of executableFiles) {
   const source = await readFile(path.join(extension, filename), "utf8");
+  const remoteUrls = [...source.matchAll(/https?:\/\/[^\s"'`<>)]+/g)].map(
+    ([url]) => url,
+  );
   assert(!/\beval\s*\(/.test(source), `${filename} uses eval`);
   assert(!/\bnew\s+Function\b/.test(source), `${filename} uses new Function`);
   assert(
@@ -91,8 +94,10 @@ for (const filename of executableFiles) {
     `${filename} has inline script`,
   );
   assert(
-    !/https?:\/\//.test(source),
-    `${filename} contains remote code or a remote URL`,
+    remoteUrls.every(
+      (url) => url === "https://github.com/spice-framework/spice",
+    ),
+    `${filename} contains an unapproved remote URL: ${remoteUrls.join(", ")}`,
   );
 }
 

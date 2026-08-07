@@ -189,6 +189,10 @@ legend {
   gap: 10px 18px;
 }
 
+.color-grid-disabled {
+  opacity: 0.58;
+}
+
 .color-field {
   display: grid;
   grid-template-columns: 38px minmax(0, 1fr) 84px;

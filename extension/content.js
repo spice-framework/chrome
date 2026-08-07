@@ -3,7 +3,8 @@
 
   const { SpiceSyntax, SpiceSettings } = globalThis;
   const RENDERED_ATTRIBUTE = "data-spice-rendered";
-  const BADGE_CLASS = "spice-file-badge";
+  const INDICATOR_CLASS = "spice-file-indicator";
+  const SPICE_URL = "https://github.com/spice-framework/spice";
   const LINE_SELECTORS = [
     ".react-file-line",
     ".blob-code-inner",
@@ -93,67 +94,94 @@
     return annotationCount;
   }
 
-  function createBadge(annotationCount) {
-    const badge = document.createElement("span");
-    badge.className = BADGE_CLASS;
-    badge.title = `Spice file · ${annotationCount} ${
-      annotationCount === 1 ? "annotation" : "annotations"
-    }`;
-    badge.setAttribute("aria-label", badge.title);
+  function indicatorLabel(annotationCount) {
+    return `Spice file · ${annotationCount} ${
+      annotationCount === 1 ? "declaration" : "declarations"
+    } · Open Spice framework`;
+  }
+
+  function createIndicator(annotationCount, size) {
+    const indicator = document.createElement("a");
+    indicator.className = INDICATOR_CLASS;
+    indicator.classList.toggle(
+      "spice-file-indicator--medium",
+      size === "medium",
+    );
+    indicator.href = SPICE_URL;
+    indicator.target = "_blank";
+    indicator.rel = "noopener noreferrer";
+    indicator.title = indicatorLabel(annotationCount);
+    indicator.setAttribute("aria-label", indicator.title);
 
     const logo = document.createElement("img");
     logo.src = chrome.runtime.getURL("assets/logo-16.png");
     logo.width = 16;
     logo.height = 16;
     logo.alt = "";
-    badge.append(logo, document.createTextNode("Spice file"));
-    return badge;
+    indicator.append(logo);
+    return indicator;
   }
 
-  function findBlobBadgeHost() {
-    const direct = document.querySelector(
-      '[data-testid="blob-header-content"], [data-testid="blob-header"] .file-info, .file-header .file-info',
+  function isVisible(element) {
+    return (
+      element.getClientRects().length > 0 &&
+      getComputedStyle(element).display !== "none"
     );
-    if (direct) {
-      return direct;
-    }
+  }
 
-    const heading = document.querySelector(
-      'h2[data-testid="screen-reader-heading"]',
-    );
-    if (!heading) {
+  function findBlobIndicatorPlacement() {
+    const selectors = [
+      '[data-testid="more-file-actions-button-nav-menu-wide"]',
+      '[data-testid="more-file-actions-button-nav-menu-narrow"]',
+      '[data-testid="more-file-actions-button"]',
+      '[data-testid="raw-button"]',
+    ];
+    const candidates = selectors.flatMap((selector) => [
+      ...document.querySelectorAll(selector),
+    ]);
+    const anchor = candidates.find(isVisible) ?? candidates[0];
+    if (!anchor?.parentElement) {
       return null;
     }
-    let container = heading.parentElement;
-    for (let depth = 0; container && depth < 3; depth += 1) {
-      const visibleChild = [...container.children].find(
-        (child) => child !== heading && !child.matches("h1,h2,h3"),
-      );
-      if (visibleChild) {
-        return visibleChild;
-      }
-      container = container.parentElement;
-    }
-    return heading.parentElement;
+    return {
+      host: anchor.parentElement,
+      before: anchor,
+      size: anchor.dataset.testid?.includes("nav-menu") ? "medium" : "small",
+    };
   }
 
-  function updateBadge(host, annotationCount) {
-    if (!host) {
-      return;
+  function updateIndicator(root, placement, annotationCount) {
+    const indicators = [...root.querySelectorAll(`.${INDICATOR_CLASS}`)];
+    const existing = indicators.shift();
+    for (const duplicate of indicators) {
+      duplicate.remove();
     }
-    const existing = host.querySelector(`:scope > .${BADGE_CLASS}`);
     if (annotationCount === 0) {
       existing?.remove();
       return;
     }
-    if (existing) {
-      existing.title = `Spice file · ${annotationCount} ${
-        annotationCount === 1 ? "annotation" : "annotations"
-      }`;
-      existing.setAttribute("aria-label", existing.title);
+    if (!placement) {
       return;
     }
-    host.append(createBadge(annotationCount));
+    if (existing) {
+      existing.title = indicatorLabel(annotationCount);
+      existing.setAttribute("aria-label", existing.title);
+      existing.classList.toggle(
+        "spice-file-indicator--medium",
+        placement.size === "medium",
+      );
+      if (
+        existing.parentElement !== placement.host ||
+        existing.nextSibling !== placement.before
+      ) {
+        placement.host.insertBefore(existing, placement.before);
+      }
+      return;
+    }
+    placement.host.insertBefore(
+      createIndicator(annotationCount, placement.size),
+      placement.before,
+    );
   }
 
   function pathForDiffContainer(container) {
@@ -173,10 +201,21 @@
     return label?.getAttribute("title") ?? label?.textContent?.trim() ?? "";
   }
 
-  function findDiffBadgeHost(container) {
-    return container.querySelector(
-      '.file-info, [data-testid="file-header-content"], [data-testid="file-header"]',
+  function findDiffIndicatorPlacement(container) {
+    const actions = container.querySelector(
+      '.file-actions, [data-testid="file-header-actions"], .file-header .BtnGroup',
     );
+    if (actions) {
+      return {
+        host: actions,
+        before: actions.firstElementChild,
+        size: "small",
+      };
+    }
+    const header = container.querySelector(
+      '.file-header, [data-testid="file-header"]',
+    );
+    return header ? { host: header, before: null, size: "small" } : null;
   }
 
   function scanDiffs() {
@@ -190,12 +229,12 @@
           continue;
         }
         seen.add(container);
-        const host = findDiffBadgeHost(container);
+        const placement = findDiffIndicatorPlacement(container);
         if (!isGoPath(pathForDiffContainer(container))) {
-          updateBadge(host, 0);
+          updateIndicator(container, placement, 0);
           continue;
         }
-        updateBadge(host, renderLines(container));
+        updateIndicator(container, placement, renderLines(container));
       }
     }
   }
@@ -204,6 +243,7 @@
     settings = SpiceSettings.normalizeSettings(nextSettings);
     const root = document.documentElement;
     root.classList.toggle("spice-conceal-prefix", settings.concealPrefix);
+    root.classList.toggle("spice-vivid-theme", settings.theme === "vivid");
     root.classList.toggle("spice-custom-theme", settings.theme === "custom");
     for (const [key, value] of Object.entries(settings.colors)) {
       root.style.setProperty(`--spice-custom-${key}`, value);
@@ -212,12 +252,21 @@
 
   function scan() {
     scanQueued = false;
+    for (const legacyBadge of document.querySelectorAll(".spice-file-badge")) {
+      legacyBadge.remove();
+    }
     if (currentBlobIsGo()) {
-      updateBadge(findBlobBadgeHost(), renderLines(document));
+      updateIndicator(
+        document,
+        findBlobIndicatorPlacement(),
+        renderLines(document),
+      );
     } else {
-      for (const badge of document.querySelectorAll(`.${BADGE_CLASS}`)) {
-        if (!badge.closest(FILE_CONTAINER_SELECTORS.join(","))) {
-          badge.remove();
+      for (const indicator of document.querySelectorAll(
+        `.${INDICATOR_CLASS}`,
+      )) {
+        if (!indicator.closest(FILE_CONTAINER_SELECTORS.join(","))) {
+          indicator.remove();
         }
       }
     }

@@ -33,11 +33,20 @@
         display: flex;
         align-items: center;
       }
+
+      .file-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
     </style>
   </head>
   <body>
     <div class="js-file" data-path="main.go">
-      <div class="file-header"><span class="file-info">main.go</span></div>
+      <div class="file-header">
+        <span class="file-info">main.go</span>
+        <div class="file-actions"><button type="button">···</button></div>
+      </div>
       <table>
         <tbody>
           <tr>
@@ -52,7 +61,10 @@
       </table>
     </div>
     <div class="js-file" data-path="README.md">
-      <div class="file-header"><span class="file-info">README.md</span></div>
+      <div class="file-header">
+        <span class="file-info">README.md</span>
+        <div class="file-actions"><button type="button">···</button></div>
+      </div>
       <table>
         <tbody>
           <tr>

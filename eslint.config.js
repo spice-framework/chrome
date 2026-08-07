@@ -14,6 +14,7 @@ module.exports = [
         chrome: "readonly",
         document: "readonly",
         FormData: "readonly",
+        getComputedStyle: "readonly",
         globalThis: "readonly",
         location: "readonly",
         module: "readonly",

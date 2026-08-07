@@ -65,6 +65,17 @@
 
   function renderPreview() {
     const current = readForm();
+    const colors =
+      current.theme === "native"
+        ? SpiceSettings.NATIVE_PREVIEW_COLORS
+        : current.theme === "vivid"
+          ? SpiceSettings.VIVID_COLORS
+          : current.colors;
+    const customColorsEnabled = current.theme === "custom";
+    colorGrid.classList.toggle("color-grid-disabled", !customColorsEnabled);
+    for (const input of colorGrid.querySelectorAll("input")) {
+      input.disabled = !customColorsEnabled;
+    }
     preview.replaceChildren();
     for (const source of previewLines) {
       const line = document.createElement("span");
@@ -84,7 +95,7 @@
         const colorKey = token.kind
           .toLowerCase()
           .replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
-        span.style.color = current.colors[colorKey];
+        span.style.color = colors[colorKey];
         line.append(span);
         offset = token.end;
       }

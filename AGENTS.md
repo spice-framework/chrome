@@ -16,8 +16,10 @@ source, copy behavior, raw views, reviews, and Git content unchanged.
 - Semantic token categories track the Spice GoLand plugin: prefix, sigil,
   namespace, annotation, argument, imported symbol, import alias, type
   reference, string, number, Boolean, identifier, keyword, and punctuation.
-- A logo-backed `Spice file` badge appears only when at least one canonical
-  Spice line is detected in the current Go file or diff.
+- An icon-only Spice indicator appears beside GitHub's right-side file actions
+  only when at least one canonical Spice line is detected in the current Go
+  file or diff. Its label is exposed through accessible and hover text, and its
+  explicit link opens the canonical Spice repository.
 - GitHub SPA navigation and incrementally rendered diff lines must be handled
   idempotently without modifying ordinary Go syntax spans.
 - The extension requests only GitHub content-script access and synchronized

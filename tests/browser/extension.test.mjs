@@ -35,12 +35,28 @@ try {
     { waitUntil: "domcontentloaded" },
   );
 
-  const badge = page.locator(".spice-file-badge");
-  await badge.waitFor();
-  assert.equal(await badge.textContent(), "Spice file");
-  assert.match(await badge.getAttribute("title"), /4 annotations/);
-  assert.equal(await badge.locator("img").getAttribute("width"), "16");
-  assert.equal(await page.locator(".spice-file-badge").count(), 1);
+  const indicator = page.locator(".spice-file-indicator");
+  await indicator.waitFor();
+  assert.equal(await indicator.textContent(), "");
+  assert.match(await indicator.getAttribute("title"), /4 declarations/);
+  assert.equal(await indicator.locator("img").getAttribute("width"), "16");
+  assert.equal(
+    await indicator.getAttribute("aria-label"),
+    await indicator.getAttribute("title"),
+  );
+  assert.equal(
+    await indicator.getAttribute("href"),
+    "https://github.com/spice-framework/spice",
+  );
+  assert.equal(await indicator.getAttribute("target"), "_blank");
+  assert.equal(await page.locator(".spice-file-indicator").count(), 1);
+  assert.equal(await page.locator(".spice-file-badge").count(), 0);
+  assert.equal(
+    await indicator.evaluate(
+      (element) => element.nextElementSibling?.dataset.testid,
+    ),
+    "more-file-actions-button-nav-menu-wide",
+  );
 
   const canonicalSources = [
     '// @import { Application } from "github.com/spice-framework/spice/pkg/app"',
@@ -89,6 +105,31 @@ try {
   );
   assert.equal(
     await page
+      .locator('#LC5 [data-spice-token="NAMESPACE"]')
+      .evaluate((element) => getComputedStyle(element).color),
+    "rgb(240, 246, 252)",
+  );
+  assert.equal(
+    await page
+      .locator('#LC5 [data-spice-token="ANNOTATION"]')
+      .evaluate((element) => getComputedStyle(element).color),
+    "rgb(210, 168, 255)",
+  );
+  assert.notEqual(
+    await page
+      .locator('#LC5 [data-spice-token="ANNOTATION"]')
+      .evaluate((element) => getComputedStyle(element).fontWeight),
+    "600",
+  );
+  assert.deepEqual(
+    await page.locator("html").evaluate((element) => ({
+      vivid: element.classList.contains("spice-vivid-theme"),
+      custom: element.classList.contains("spice-custom-theme"),
+    })),
+    { vivid: false, custom: false },
+  );
+  assert.equal(
+    await page
       .locator("#LC4 .spice-source-prefix")
       .evaluate((element) => getComputedStyle(element).fontSize),
     "0px",
@@ -123,18 +164,55 @@ try {
   await page.locator('#LC10 [data-spice-token="ANNOTATION"]').waitFor();
   await page.waitForFunction(() =>
     document
-      .querySelector(".spice-file-badge")
-      ?.title.includes("5 annotations"),
+      .querySelector(".spice-file-indicator")
+      ?.title.includes("5 declarations"),
   );
-  assert.equal(await page.locator(".spice-file-badge").count(), 1);
+  assert.equal(await page.locator(".spice-file-indicator").count(), 1);
 
-  const logoUrl = await badge.locator("img").getAttribute("src");
+  const linkedPagePromise = browser.context.waitForEvent("page");
+  await indicator.click();
+  const linkedPage = await linkedPagePromise;
+  await linkedPage.waitForLoadState("domcontentloaded");
+  assert.equal(new URL(linkedPage.url()).pathname, "/spice-framework/spice");
+  await linkedPage.close();
+
+  const logoUrl = await indicator.locator("img").getAttribute("src");
   const extensionId = extensionIdFromUrl(logoUrl);
   const options = await browser.context.newPage();
   await options.goto(`chrome-extension://${extensionId}/options.html`);
   await options.locator("#color-grid .color-field").first().waitFor();
-  assert.equal(await options.locator("#color-grid .color-field").count(), 15);
+  assert.equal(await options.locator("#color-grid .color-field").count(), 14);
+  assert.equal(
+    await options.locator('input[name="theme"][value="native"]').isChecked(),
+    true,
+  );
+  assert.equal(
+    await options.locator('[data-color-text="annotation"]').isDisabled(),
+    true,
+  );
+  await options.locator('input[name="theme"][value="vivid"]').check();
+  await options.locator('button[type="submit"]').click();
+  await page.waitForFunction(() =>
+    document.documentElement.classList.contains("spice-vivid-theme"),
+  );
+  assert.equal(
+    await page
+      .locator('#LC5 [data-spice-token="PARAMETER"]')
+      .first()
+      .evaluate((element) => getComputedStyle(element).color),
+    "rgb(255, 166, 87)",
+  );
+  assert.equal(
+    await page
+      .locator('#LC5 [data-spice-token="ANNOTATION"]')
+      .evaluate((element) => getComputedStyle(element).fontWeight),
+    "600",
+  );
   await options.locator('input[name="theme"][value="custom"]').check();
+  assert.equal(
+    await options.locator('[data-color-text="annotation"]').isEnabled(),
+    true,
+  );
   await options.locator('[data-color-text="annotation"]').fill("#00ff88");
   await options
     .locator('[data-color-text="annotation"]')
@@ -162,18 +240,36 @@ try {
     "14px",
   );
 
+  await options.locator('input[name="theme"][value="native"]').check();
+  await options.locator("#conceal-prefix").check();
+  await options.locator('button[type="submit"]').click();
+  await page.waitForFunction(
+    () =>
+      document.documentElement.classList.contains("spice-conceal-prefix") &&
+      !document.documentElement.classList.contains("spice-vivid-theme") &&
+      !document.documentElement.classList.contains("spice-custom-theme"),
+  );
+
   await page.goto("https://github.com/spice-framework/petclinic/pull/1/files", {
     waitUntil: "domcontentloaded",
   });
   await page.locator('#diff-go [data-spice-token="ANNOTATION"]').waitFor();
-  assert.equal(await page.locator(".spice-file-badge").count(), 1);
+  assert.equal(await page.locator(".spice-file-indicator").count(), 1);
   assert.equal(
-    await page.locator('[data-path="main.go"] .spice-file-badge').textContent(),
-    "Spice file",
+    await page
+      .locator('[data-path="main.go"] .spice-file-indicator')
+      .textContent(),
+    "",
   );
   assert.equal(
-    await page.locator('[data-path="README.md"] .spice-file-badge').count(),
+    await page.locator('[data-path="README.md"] .spice-file-indicator').count(),
     0,
+  );
+  assert.equal(
+    await page
+      .locator('[data-path="main.go"] .spice-file-indicator')
+      .evaluate((element) => element.parentElement?.className),
+    "file-actions",
   );
   assert.equal(await page.locator("#diff-go").textContent(), "// @Application");
   assert.equal(
@@ -194,7 +290,7 @@ try {
     fullPage: true,
   });
   console.log(
-    "Browser extension test passed: rendering, source integrity, badge, SPA updates, and options.",
+    "Browser extension test passed: native/vivid themes, source integrity, icon link, SPA updates, diffs, and options.",
   );
 } finally {
   await browser.close();

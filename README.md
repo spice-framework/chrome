@@ -1,6 +1,6 @@
 # Spice for GitHub
 
-Spice for GitHub makes valid [Spice](https://github.com/spice-framework/spice) declaration comments read like native language annotations on GitHub. It visually folds the `// ` prefix, restores semantic syntax highlighting, and adds the Spice logo to every detected Spice file.
+Spice for GitHub makes valid [Spice](https://github.com/spice-framework/spice) declaration comments read like native language annotations on GitHub. It visually folds the `// ` prefix, restores semantic syntax highlighting, and adds an icon-only Spice link beside GitHub's file actions for every detected Spice file.
 
 The source is never rewritten. Copying a declaration still produces valid Go such as `// @Application`, raw views stay unchanged, and GitHub's own review data remains authoritative.
 
@@ -10,8 +10,9 @@ The source is never rewritten. Copying a declaration still produces valid Go suc
 
 - Recognizes only canonical declaration comments beginning with exactly `// @`.
 - Mirrors the Spice GoLand plugin's semantic categories: annotations, namespaces, directive keywords, imported symbols and aliases, argument names, type references, strings, numbers, booleans, identifiers, and punctuation.
-- Follows GitHub's light or dark syntax palette automatically, with a complete custom-color settings page.
-- Marks detected files with a compact **Spice file** badge and the project logo.
+- Uses a restrained **Native GitHub** palette by default so annotations match Go's visual density in either GitHub theme.
+- Provides the original GoLand-inspired **Spice Vivid** palette plus complete custom semantic colors.
+- Marks detected files with the project logo beside GitHub's right-side file actions; hover text identifies it and clicking opens the Spice framework in a new tab.
 - Handles GitHub file views, pull-request diffs, and client-side navigation without duplicating rendered content.
 - Requests only Chrome's `storage` permission. There is no telemetry, remote code, or network request from the extension.
 
@@ -41,7 +42,7 @@ npm run test:live
 Build outputs:
 
 - `build/unpacked` — load directly in Chrome.
-- `build/spice-for-github-v0.1.0.zip` — deterministic release package.
+- `build/spice-for-github-v0.1.1.zip` — deterministic release package.
 
 ## Source-integrity contract
 

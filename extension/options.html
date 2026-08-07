@@ -44,11 +44,21 @@
           <fieldset>
             <legend>Color theme</legend>
             <label class="choice">
-              <input type="radio" name="theme" value="github" />
+              <input type="radio" name="theme" value="native" />
               <span
-                ><strong>Follow GitHub</strong
+                ><strong>Native GitHub</strong
                 ><small
-                  >Uses GitHub's active light or dark syntax palette.</small
+                  >Matches Go's visual density and follows GitHub light or
+                  dark.</small
+                ></span
+              >
+            </label>
+            <label class="choice">
+              <input type="radio" name="theme" value="vivid" />
+              <span
+                ><strong>Spice Vivid</strong
+                ><small
+                  >Keeps the expressive GoLand-inspired semantic palette.</small
                 ></span
               >
             </label>
@@ -73,7 +83,10 @@
         <section class="card">
           <div>
             <h2>Semantic colors</h2>
-            <p>Mirrors the token categories used by the Spice GoLand plugin.</p>
+            <p>
+              Customize the token categories shared with the Spice GoLand
+              plugin.
+            </p>
           </div>
           <div id="color-grid" class="color-grid"></div>
         </section>

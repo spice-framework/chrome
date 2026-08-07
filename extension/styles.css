@@ -1,19 +1,27 @@
 :root {
   --spice-prefix: var(--color-prettylights-syntax-comment, #6e7781);
   --spice-sigil: var(--color-prettylights-syntax-comment, #6e7781);
-  --spice-namespace: var(--color-prettylights-syntax-entity, #8250df);
-  --spice-annotation: var(--color-prettylights-syntax-keyword, #cf222e);
-  --spice-parameter: var(--color-prettylights-syntax-variable, #953800);
-  --spice-importSymbol: var(--color-prettylights-syntax-keyword, #cf222e);
-  --spice-importAlias: var(--color-prettylights-syntax-entity, #8250df);
-  --spice-typeReference: var(--color-prettylights-syntax-entity, #8250df);
+  --spice-namespace: var(--fgColor-default, #1f2328);
+  --spice-annotation: var(--color-prettylights-syntax-entity, #8250df);
+  --spice-parameter: var(--fgColor-default, #1f2328);
+  --spice-importSymbol: var(--fgColor-default, #1f2328);
+  --spice-importAlias: var(--fgColor-default, #1f2328);
+  --spice-typeReference: var(--fgColor-default, #1f2328);
   --spice-string: var(--color-prettylights-syntax-string, #0a3069);
   --spice-number: var(--color-prettylights-syntax-constant, #0550ae);
   --spice-boolean: var(--color-prettylights-syntax-constant, #0550ae);
   --spice-identifier: var(--fgColor-default, #1f2328);
   --spice-keyword: var(--color-prettylights-syntax-keyword, #cf222e);
   --spice-operator: var(--fgColor-muted, #656d76);
-  --spice-badgeAccent: #d9772b;
+}
+
+.spice-vivid-theme {
+  --spice-namespace: var(--color-prettylights-syntax-entity, #8250df);
+  --spice-annotation: var(--color-prettylights-syntax-keyword, #cf222e);
+  --spice-parameter: var(--color-prettylights-syntax-variable, #953800);
+  --spice-importSymbol: var(--color-prettylights-syntax-keyword, #cf222e);
+  --spice-importAlias: var(--color-prettylights-syntax-entity, #8250df);
+  --spice-typeReference: var(--color-prettylights-syntax-entity, #8250df);
 }
 
 .spice-custom-theme {
@@ -31,7 +39,6 @@
   --spice-identifier: var(--spice-custom-identifier);
   --spice-keyword: var(--spice-custom-keyword);
   --spice-operator: var(--spice-custom-operator);
-  --spice-badgeAccent: var(--spice-custom-badgeAccent);
 }
 
 [data-spice-token="PREFIX"] {
@@ -48,7 +55,6 @@
 
 [data-spice-token="ANNOTATION"] {
   color: var(--spice-annotation) !important;
-  font-weight: 600;
 }
 
 [data-spice-token="PARAMETER"] {
@@ -85,7 +91,6 @@
 
 [data-spice-token="KEYWORD"] {
   color: var(--spice-keyword) !important;
-  font-weight: 600;
 }
 
 [data-spice-token="OPERATOR"] {
@@ -97,31 +102,57 @@
   line-height: 0 !important;
 }
 
-.spice-file-badge {
-  display: inline-flex;
+.spice-vivid-theme [data-spice-token="ANNOTATION"],
+.spice-vivid-theme [data-spice-token="KEYWORD"] {
+  font-weight: 600;
+}
+
+.spice-file-indicator {
+  display: inline-grid;
+  place-items: center;
   align-items: center;
   flex: none;
-  gap: 5px;
-  min-height: 24px;
+  width: 28px;
+  height: 28px;
   box-sizing: border-box;
-  margin-inline-start: 8px;
-  padding: 2px 8px 2px 5px;
+  margin-inline: 4px;
+  padding: 5px;
   color: var(--fgColor-default, #1f2328);
-  background: color-mix(
-    in srgb,
-    var(--spice-badgeAccent) 13%,
+  background: var(
+    --button-default-bgColor-rest,
     var(--bgColor-default, #ffffff)
   );
   border: 1px solid
-    color-mix(in srgb, var(--spice-badgeAccent) 52%, transparent);
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 18px;
-  vertical-align: middle;
+    var(--button-default-borderColor-rest, var(--borderColor-default, #d0d7de));
+  border-radius: 6px;
+  box-shadow: var(--button-default-shadow-rest, 0 1px 0 rgb(31 35 40 / 4%));
+  text-decoration: none;
 }
 
-.spice-file-badge img {
+.spice-file-indicator--medium {
+  width: 32px;
+  height: 32px;
+  padding: 7px;
+}
+
+.spice-file-indicator:hover {
+  background: var(
+    --button-default-bgColor-hover,
+    var(--bgColor-muted, #f6f8fa)
+  );
+  border-color: var(
+    --button-default-borderColor-hover,
+    var(--borderColor-default, #d0d7de)
+  );
+  text-decoration: none;
+}
+
+.spice-file-indicator:focus-visible {
+  outline: 2px solid var(--focus-outlineColor, #0969da);
+  outline-offset: -2px;
+}
+
+.spice-file-indicator img {
   display: block;
   border-radius: 4px;
 }
