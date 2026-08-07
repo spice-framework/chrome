@@ -2,3 +2,4 @@ node_modules/
 build/
 artifacts/
 *.log
+gha-creds-*.json

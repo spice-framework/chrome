@@ -18,8 +18,9 @@
     "test:live": "node tests/browser/live-smoke.mjs",
     "store:assets": "node scripts/store-assets.mjs",
     "validate": "node scripts/validate-extension.mjs",
+    "validate:release": "node scripts/validate-release.mjs",
     "validate:store": "node scripts/validate-store.mjs",
-    "verify": "npm run format:check && npm run lint && npm run validate && npm run test:unit && npm run build && npm run store:assets && npm run validate:store && npm run test:browser"
+    "verify": "npm run format:check && npm run lint && npm run validate && npm run validate:release && npm run test:unit && npm run build && npm run store:assets && npm run validate:store && npm run test:browser"
   },
   "devDependencies": {
     "eslint": "10.8.0",

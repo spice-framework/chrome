@@ -1,0 +1,121 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: Chrome Web Store operation
+        required: true
+        type: choice
+        default: status
+        options:
+          - status
+          - publish-existing-draft
+
+concurrency:
+  group: chrome-web-store-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: chrome-web-store
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: Check out release tag
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Validate tag and release notes
+        run: node scripts/validate-release.mjs "${GITHUB_REF_NAME}"
+      - name: Verify release tree
+        run: xvfb-run -a npm run verify
+      - name: Authenticate to Google Cloud without a stored key
+        id: google-auth
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3
+        with:
+          project_id: spice-framework-cws
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_lifetime: 300s
+          access_token_scopes: https://www.googleapis.com/auth/chromewebstore
+          create_credentials_file: false
+      - name: Upload and submit Chrome Web Store release
+        env:
+          CWS_ACCESS_TOKEN: ${{ steps.google-auth.outputs.access_token }}
+          CWS_EXTENSION_ID: ${{ vars.CWS_EXTENSION_ID }}
+          CWS_PACKAGE: build/spice-for-github-${{ github.ref_name }}.zip
+          CWS_PUBLISHER_ID: ${{ vars.CWS_PUBLISHER_ID }}
+          CWS_VERSION: ${{ github.ref_name }}
+        run: |
+          CWS_VERSION="${CWS_VERSION#v}"
+          export CWS_VERSION
+          node scripts/chrome-web-store.mjs deploy
+      - name: Create checksum
+        run: |
+          sha256sum "build/spice-for-github-${GITHUB_REF_NAME}.zip" > "build/spice-for-github-${GITHUB_REF_NAME}.zip.sha256"
+          cp store/assets/screenshot-settings-dark-1280x800.png build/spice-for-github-settings-dark.png
+      - name: Create or update GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PACKAGE="build/spice-for-github-${GITHUB_REF_NAME}.zip"
+          CHECKSUM="${PACKAGE}.sha256"
+          SCREENSHOT="build/spice-for-github-settings-dark.png"
+          NOTES="docs/releases/${GITHUB_REF_NAME}.md"
+          if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
+            gh release upload "${GITHUB_REF_NAME}" "${PACKAGE}" "${CHECKSUM}" "${SCREENSHOT}" --clobber
+            gh release edit "${GITHUB_REF_NAME}" --title "Spice for GitHub ${GITHUB_REF_NAME}" --notes-file "${NOTES}"
+          else
+            gh release create "${GITHUB_REF_NAME}" "${PACKAGE}" "${CHECKSUM}" "${SCREENSHOT}" --verify-tag --title "Spice for GitHub ${GITHUB_REF_NAME}" --notes-file "${NOTES}"
+          fi
+
+  manage-store:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment: chrome-web-store
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - name: Authenticate to Google Cloud without a stored key
+        id: google-auth
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3
+        with:
+          project_id: spice-framework-cws
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_lifetime: 300s
+          access_token_scopes: https://www.googleapis.com/auth/chromewebstore
+          create_credentials_file: false
+      - name: Run Chrome Web Store operation
+        env:
+          CWS_ACCESS_TOKEN: ${{ steps.google-auth.outputs.access_token }}
+          CWS_EXTENSION_ID: ${{ vars.CWS_EXTENSION_ID }}
+          CWS_PUBLISHER_ID: ${{ vars.CWS_PUBLISHER_ID }}
+        run: node scripts/chrome-web-store.mjs "${{ inputs.operation }}"

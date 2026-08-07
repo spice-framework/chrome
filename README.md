@@ -54,6 +54,8 @@ See [Privacy](docs/privacy.md), [Contributing](CONTRIBUTING.md), and [Security](
 
 Chrome Web Store listing copy, disclosures, reviewer instructions, and correctly sized artwork live in [store/listing.md](store/listing.md).
 
+See [Releasing](docs/releasing.md) for the keyless GitHub Actions → Chrome Web Store release contract and one-time Store bootstrap.
+
 ## License
 
 Apache License 2.0.
