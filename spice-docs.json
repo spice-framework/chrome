@@ -1,0 +1,34 @@
+{
+  "$schema": "https://spiceframework.dev/schemas/spice-docs.schema.json",
+  "schema": 1,
+  "product": {
+    "id": "github-extension",
+    "title": "Spice for GitHub",
+    "family": "developer-tools",
+    "summary": "A browser extension that renders canonical Spice declaration comments semantically on GitHub without changing source.",
+    "maturity": "preview",
+    "audience": [
+      "application-developer",
+      "evaluator"
+    ]
+  },
+  "content": [
+    {
+      "source": "README.md",
+      "route": "index",
+      "kind": "how-to",
+      "order": 0,
+      "search": true
+    },
+    {
+      "source": "docs/**/*.md",
+      "routeFrom": "docs",
+      "order": 10,
+      "search": true
+    }
+  ],
+  "assets": [
+    "docs/images/**",
+    "store/assets/*.png"
+  ]
+}
