@@ -3,13 +3,13 @@ import os from "node:os";
 import path from "node:path";
 import { chromium } from "playwright";
 
-export async function launchExtension(extensionPath) {
+export async function launchExtension(extensionPath, options = {}) {
   const profile = await mkdtemp(path.join(os.tmpdir(), "spice-chrome-test-"));
   const context = await chromium.launchPersistentContext(profile, {
     channel: "chromium",
     headless: true,
     ignoreDefaultArgs: ["--disable-extensions"],
-    viewport: { width: 1440, height: 1000 },
+    viewport: options.viewport ?? { width: 1440, height: 1000 },
     args: [
       `--disable-extensions-except=${extensionPath}`,
       `--load-extension=${extensionPath}`,

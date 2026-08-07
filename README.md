@@ -4,6 +4,8 @@ Spice for GitHub makes valid [Spice](https://github.com/spice-framework/spice) d
 
 The source is never rewritten. Copying a declaration still produces valid Go such as `// @Application`, raw views stay unchanged, and GitHub's own review data remains authoritative.
 
+![Spice for GitHub dark-mode settings](store/assets/screenshot-settings-dark-1280x800.png)
+
 ![Spice declarations rendered natively on GitHub](docs/images/spice-for-github.png)
 
 ## What it does
@@ -49,6 +51,8 @@ Build outputs:
 The renderer replaces only the visual children of GitHub code-line elements and immediately verifies that each line's `textContent` is identical to its original value. The folded `// ` remains in the DOM as selectable text, and GitHub's raw-source textarea is never touched. Noncanonical comments—including `//@Application` and ordinary prose containing `@`—are ignored.
 
 See [Privacy](docs/privacy.md), [Contributing](CONTRIBUTING.md), and [Security](SECURITY.md) for the project policies.
+
+Chrome Web Store listing copy, disclosures, reviewer instructions, and correctly sized artwork live in [store/listing.md](store/listing.md).
 
 ## License
 
