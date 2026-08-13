@@ -7,6 +7,8 @@ export const {
   parseImportDirective,
   highlightTokens,
   concealmentRange,
+  highlightDisplayLine,
+  concealmentRangeForDisplayLine,
 } = syntax;
 
 export default syntax;

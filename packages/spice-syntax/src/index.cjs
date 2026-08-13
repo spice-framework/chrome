@@ -241,6 +241,65 @@
       return null;
     }
 
+    function skipIndent(source, start) {
+      let offset = start;
+      while (
+        offset < source.length &&
+        (source[offset] === " " || source[offset] === "\t")
+      ) {
+        offset += 1;
+      }
+      return offset;
+    }
+
+    function displayLineOffset(source) {
+      if (typeof source !== "string") {
+        return -1;
+      }
+      const afterIndent = skipIndent(source, 0);
+      if (
+        afterIndent < source.length &&
+        (source[afterIndent] === "+" || source[afterIndent] === "-")
+      ) {
+        const afterMarker = skipIndent(source, afterIndent + 1);
+        if (highlightTokens(source.slice(afterMarker)).length > 0) {
+          return afterMarker;
+        }
+      }
+      return highlightTokens(source.slice(afterIndent)).length > 0
+        ? afterIndent
+        : -1;
+    }
+
+    function shiftRange(range, offset) {
+      return Object.freeze([range[0] + offset, range[1] + offset]);
+    }
+
+    function highlightDisplayLine(source) {
+      const offset = displayLineOffset(source);
+      if (offset < 0) {
+        return Object.freeze([]);
+      }
+      return Object.freeze(
+        highlightTokens(source.slice(offset)).map((token) =>
+          Object.freeze({
+            kind: token.kind,
+            start: token.start + offset,
+            end: token.end + offset,
+          }),
+        ),
+      );
+    }
+
+    function concealmentRangeForDisplayLine(source) {
+      const offset = displayLineOffset(source);
+      if (offset < 0) {
+        return null;
+      }
+      const range = concealmentRange(source.slice(offset));
+      return range ? shiftRange(range, offset) : null;
+    }
+
     function addAnnotationNameTokens(tokens, comment, range) {
       const sigil = range[0];
       addToken(tokens, TokenKind.SIGIL, sigil, sigil + 1);
@@ -414,6 +473,8 @@
       parseImportDirective,
       highlightTokens,
       concealmentRange,
+      highlightDisplayLine,
+      concealmentRangeForDisplayLine,
     });
   },
 );
