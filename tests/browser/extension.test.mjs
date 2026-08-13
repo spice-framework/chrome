@@ -271,7 +271,7 @@ try {
     waitUntil: "domcontentloaded",
   });
   await page.locator('#diff-go [data-spice-token="ANNOTATION"]').waitFor();
-  assert.equal(await page.locator(".spice-file-indicator").count(), 3);
+  assert.equal(await page.locator(".spice-file-indicator").count(), 4);
   assert.equal(
     await page
       .locator('[data-path="main.go"] .spice-file-indicator')
@@ -308,6 +308,12 @@ try {
       .locator('[data-path="owner.go"] .spice-file-indicator')
       .evaluate((element) => element.parentElement?.dataset.testid),
     "file-header-actions",
+  );
+  assert.equal(
+    await page
+      .locator('#diff-text-inner [data-spice-token="ANNOTATION"]')
+      .textContent(),
+    "Bean",
   );
 
   await page.goto(

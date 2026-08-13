@@ -10,6 +10,8 @@
     ".blob-code-inner",
     "td.blob-code",
     '[data-testid="diff-line-code"]',
+    '[data-testid="code-cell"]',
+    ".diff-text-inner",
   ];
   const FILE_CONTAINER_SELECTORS = [
     '[data-testid="diff-file"]',
