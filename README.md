@@ -48,7 +48,7 @@ npm run test:live
 Build outputs:
 
 - `build/unpacked` — load directly in Chrome.
-- `build/spice-for-github-v0.1.1.zip` — deterministic release package.
+- `build/spice-for-github-v0.1.2.zip` — deterministic release package.
 
 ## Source-integrity contract
 

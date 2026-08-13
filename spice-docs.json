@@ -7,10 +7,7 @@
     "family": "developer-tools",
     "summary": "A browser extension that renders canonical Spice declaration comments semantically on GitHub without changing source.",
     "maturity": "preview",
-    "audience": [
-      "application-developer",
-      "evaluator"
-    ]
+    "audience": ["application-developer", "evaluator"]
   },
   "content": [
     {
@@ -27,8 +24,5 @@
       "search": true
     }
   ],
-  "assets": [
-    "docs/images/**",
-    "store/assets/*.png"
-  ]
+  "assets": ["docs/images/**", "store/assets/*.png"]
 }

@@ -22,6 +22,7 @@ for (const filename of [
   "store/listing.md",
   "docs/privacy.md",
   "docs/releases/v0.1.1.md",
+  "docs/releases/v0.1.2.md",
 ]) {
   const source = await readFile(path.join(root, filename), "utf8");
   assert(source.trim().length > 0, `${filename} is empty`);
