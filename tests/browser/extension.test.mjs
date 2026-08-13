@@ -17,16 +17,33 @@ const diffFixture = await readFile(
   path.join(root, "tests", "fixtures", "github-diff.html"),
   "utf8",
 );
+const markdownFixture = await readFile(
+  path.join(root, "tests", "fixtures", "github-markdown.html"),
+  "utf8",
+);
+const blameFixture = await readFile(
+  path.join(root, "tests", "fixtures", "github-blame.html"),
+  "utf8",
+);
 const artifacts = path.join(root, "artifacts", "browser");
 await mkdir(artifacts, { recursive: true });
 
 const browser = await launchExtension(extensionPath);
 try {
   await browser.context.route("https://github.com/**", async (route) => {
+    const url = route.request().url();
+    let body = fixture;
+    if (url.includes("/pull/")) {
+      body = diffFixture;
+    } else if (url.includes("/blame/")) {
+      body = blameFixture;
+    } else if (url.includes(".md")) {
+      body = markdownFixture;
+    }
     await route.fulfill({
       status: 200,
       contentType: "text/html",
-      body: route.request().url().includes("/pull/") ? diffFixture : fixture,
+      body,
     });
   });
   const page = browser.context.pages()[0] ?? (await browser.context.newPage());
@@ -254,7 +271,7 @@ try {
     waitUntil: "domcontentloaded",
   });
   await page.locator('#diff-go [data-spice-token="ANNOTATION"]').waitFor();
-  assert.equal(await page.locator(".spice-file-indicator").count(), 1);
+  assert.equal(await page.locator(".spice-file-indicator").count(), 3);
   assert.equal(
     await page
       .locator('[data-path="main.go"] .spice-file-indicator')
@@ -263,7 +280,7 @@ try {
   );
   assert.equal(
     await page.locator('[data-path="README.md"] .spice-file-indicator').count(),
-    0,
+    1,
   );
   assert.equal(
     await page
@@ -278,8 +295,73 @@ try {
   );
   assert.equal(
     await page.locator("#diff-markdown").getAttribute("data-spice-rendered"),
+    "// @Application",
+  );
+  assert.equal(
+    await page
+      .locator('#diff-react-go [data-spice-token="ANNOTATION"]')
+      .textContent(),
+    "Controller",
+  );
+  assert.equal(
+    await page
+      .locator('[data-path="owner.go"] .spice-file-indicator')
+      .evaluate((element) => element.parentElement?.dataset.testid),
+    "file-header-actions",
+  );
+
+  await page.goto(
+    "https://github.com/spice-framework/spice/blob/main/docs/getting-started.md",
+    { waitUntil: "domcontentloaded" },
+  );
+  await page
+    .locator('#markdown-go-fence [data-spice-token="ANNOTATION"]')
+    .first()
+    .waitFor();
+  assert.match(
+    await page.locator("#markdown-go-fence").textContent(),
+    /\/\/ @Application/,
+  );
+  assert.match(
+    await page.locator("#markdown-go-fence").textContent(),
+    /func main\(\) \{/,
+  );
+  assert.equal(
+    await page.locator("#markdown-prose").getAttribute("data-spice-rendered"),
     null,
   );
+  assert.equal(
+    await page
+      .locator("#markdown-prose")
+      .evaluate((element) => Boolean(element.closest("[data-spice-rendered]"))),
+    false,
+  );
+  assert.equal(await page.locator(".spice-file-indicator").count(), 1);
+  assert.equal(
+    await page.locator("#markdown-go-fence").evaluate((block) => {
+      const annotation = block.querySelector('[data-spice-token="ANNOTATION"]');
+      const selection = getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(annotation);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      const selected = selection.toString();
+      selection.removeAllRanges();
+      return selected;
+    }),
+    "Application",
+  );
+
+  await page.goto(
+    "https://github.com/spice-framework/petclinic/blame/main/main.go",
+    { waitUntil: "domcontentloaded" },
+  );
+  await page.locator('#blame-go [data-spice-token="ANNOTATION"]').waitFor();
+  assert.equal(
+    await page.locator("#blame-go").textContent(),
+    "// @Application",
+  );
+  assert.equal(await page.locator(".spice-file-indicator").count(), 1);
 
   await page.screenshot({
     path: path.join(artifacts, "fixture.png"),

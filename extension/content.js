@@ -16,50 +16,51 @@
     ".js-file",
     ".file",
   ];
+  const MARKDOWN_BLOCK_SELECTORS = [
+    ".markdown-body pre",
+    ".comment-body pre",
+    ".js-comment-body pre",
+    ".highlight-source-go pre",
+    "div.highlight pre",
+    '[data-testid="markdown-body"] pre',
+    ".wiki-body pre",
+  ];
+  const EDITABLE_SURFACE_SELECTOR = [
+    "textarea",
+    "input",
+    '[contenteditable="true"]',
+    '[data-testid="read-only-cursor-text-area"]',
+  ].join(",");
   let settings = SpiceSettings.DEFAULT_SETTINGS;
   let scanQueued = false;
 
-  function isGoPath(path) {
-    return typeof path === "string" && /\.go(?:$|[?#])/.test(path);
+  function isEditableSurface(node) {
+    return Boolean(node.closest(EDITABLE_SURFACE_SELECTOR));
   }
 
-  function currentBlobIsGo() {
-    return /\/blob\//.test(location.pathname) && isGoPath(location.pathname);
-  }
-
-  function currentPageCanContainDiffs() {
-    return /\/(?:pull\/\d+\/files|commit\/[^/]+|compare\/)/.test(
-      location.pathname,
-    );
-  }
-
-  function lineCandidates(root) {
+  function uniqueElements(root, selectors) {
     const found = [];
     const seen = new Set();
-    for (const line of root.querySelectorAll(LINE_SELECTORS.join(","))) {
+    for (const element of root.querySelectorAll(selectors.join(","))) {
       if (
-        seen.has(line) ||
-        found.some((candidate) => candidate.contains(line))
+        seen.has(element) ||
+        found.some((candidate) => candidate.contains(element))
       ) {
         continue;
       }
-      seen.add(line);
-      found.push(line);
+      seen.add(element);
+      found.push(element);
     }
     return found;
   }
 
-  function renderLine(line) {
-    const source = line.textContent ?? "";
-    const tokens = SpiceSyntax.highlightTokens(source);
-    if (tokens.length === 0) {
-      return false;
-    }
-    if (line.getAttribute(RENDERED_ATTRIBUTE) === source) {
-      return true;
-    }
+  function lineCandidates(root) {
+    return uniqueElements(root, LINE_SELECTORS).filter(
+      (line) => !isEditableSurface(line),
+    );
+  }
 
-    const fragment = document.createDocumentFragment();
+  function appendTokens(fragment, source, tokens) {
     let offset = 0;
     for (const token of tokens) {
       if (token.start > offset) {
@@ -78,7 +79,20 @@
     if (offset < source.length) {
       fragment.append(source.slice(offset));
     }
+  }
 
+  function renderLine(line) {
+    const source = line.textContent ?? "";
+    const tokens = SpiceSyntax.highlightDisplayLine(source);
+    if (tokens.length === 0) {
+      return false;
+    }
+    if (line.getAttribute(RENDERED_ATTRIBUTE) === source) {
+      return true;
+    }
+
+    const fragment = document.createDocumentFragment();
+    appendTokens(fragment, source, tokens);
     line.replaceChildren(fragment);
     line.setAttribute(RENDERED_ATTRIBUTE, source);
     return line.textContent === source;
@@ -92,6 +106,63 @@
       }
     }
     return annotationCount;
+  }
+
+  function markdownBlockCandidates(root) {
+    return uniqueElements(root, MARKDOWN_BLOCK_SELECTORS).filter(
+      (block) =>
+        !isEditableSurface(block) &&
+        !block.querySelector(LINE_SELECTORS.join(",")),
+    );
+  }
+
+  function splitDisplayLines(source) {
+    return source.split(/(?<=\r\n|\n|\r)/);
+  }
+
+  function appendDisplaySegment(fragment, segment) {
+    const newline = segment.match(/(\r\n|\n|\r)$/)?.[0] ?? "";
+    const line = newline ? segment.slice(0, -newline.length) : segment;
+    const tokens = SpiceSyntax.highlightDisplayLine(line);
+    if (tokens.length === 0) {
+      fragment.append(segment);
+      return 0;
+    }
+    appendTokens(fragment, line, tokens);
+    if (newline) {
+      fragment.append(newline);
+    }
+    return 1;
+  }
+
+  function renderCodeBlock(block) {
+    const source = block.textContent ?? "";
+    if (block.getAttribute(RENDERED_ATTRIBUTE) === source) {
+      return block.querySelectorAll('[data-spice-token="PREFIX"]').length;
+    }
+    const fragment = document.createDocumentFragment();
+    let spiceCount = 0;
+    for (const segment of splitDisplayLines(source)) {
+      spiceCount += appendDisplaySegment(fragment, segment);
+    }
+    if (spiceCount === 0) {
+      return 0;
+    }
+    block.replaceChildren(fragment);
+    block.setAttribute(RENDERED_ATTRIBUTE, source);
+    return block.textContent === source ? spiceCount : 0;
+  }
+
+  function renderMarkdownBlocks(root) {
+    let annotationCount = 0;
+    for (const block of markdownBlockCandidates(root)) {
+      annotationCount += renderCodeBlock(block);
+    }
+    return annotationCount;
+  }
+
+  function spiceDeclarationCount(root) {
+    return root.querySelectorAll('[data-spice-token="PREFIX"]').length;
   }
 
   function indicatorLabel(annotationCount) {
@@ -184,23 +255,6 @@
     );
   }
 
-  function pathForDiffContainer(container) {
-    const explicit =
-      container.getAttribute("data-path") ??
-      container.getAttribute("data-file-path") ??
-      container.querySelector("[data-path]")?.getAttribute("data-path") ??
-      container
-        .querySelector("[data-file-path]")
-        ?.getAttribute("data-file-path");
-    if (explicit) {
-      return explicit;
-    }
-    const label = container.querySelector(
-      '.file-info a[title], [data-testid="file-header"] a[title], .Link--primary[title]',
-    );
-    return label?.getAttribute("title") ?? label?.textContent?.trim() ?? "";
-  }
-
   function findDiffIndicatorPlacement(container) {
     const actions = container.querySelector(
       '.file-actions, [data-testid="file-header-actions"], .file-header .BtnGroup',
@@ -218,24 +272,20 @@
     return header ? { host: header, before: null, size: "small" } : null;
   }
 
-  function scanDiffs() {
-    if (!currentPageCanContainDiffs()) {
-      return;
-    }
-    const seen = new Set();
-    for (const selector of FILE_CONTAINER_SELECTORS) {
-      for (const container of document.querySelectorAll(selector)) {
-        if (seen.has(container)) {
-          continue;
-        }
-        seen.add(container);
-        const placement = findDiffIndicatorPlacement(container);
-        if (!isGoPath(pathForDiffContainer(container))) {
-          updateIndicator(container, placement, 0);
-          continue;
-        }
-        updateIndicator(container, placement, renderLines(container));
-      }
+  function fileContainers() {
+    const blobPlacement = findBlobIndicatorPlacement();
+    return uniqueElements(document, FILE_CONTAINER_SELECTORS).filter(
+      (container) => !blobPlacement || !container.contains(blobPlacement.host),
+    );
+  }
+
+  function scanFileContainers() {
+    for (const container of fileContainers()) {
+      updateIndicator(
+        container,
+        findDiffIndicatorPlacement(container),
+        spiceDeclarationCount(container),
+      );
     }
   }
 
@@ -255,13 +305,11 @@
     for (const legacyBadge of document.querySelectorAll(".spice-file-badge")) {
       legacyBadge.remove();
     }
-    if (currentBlobIsGo()) {
-      updateIndicator(
-        document,
-        findBlobIndicatorPlacement(),
-        renderLines(document),
-      );
-    } else {
+    renderLines(document);
+    renderMarkdownBlocks(document);
+    const containers = fileContainers();
+    const blobPlacement = findBlobIndicatorPlacement();
+    if (containers.length > 0) {
       for (const indicator of document.querySelectorAll(
         `.${INDICATOR_CLASS}`,
       )) {
@@ -269,8 +317,10 @@
           indicator.remove();
         }
       }
+      scanFileContainers();
+      return;
     }
-    scanDiffs();
+    updateIndicator(document, blobPlacement, spiceDeclarationCount(document));
   }
 
   function queueScan() {

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>getting-started.md · spice-framework/spice</title>
+    <style>
+      :root {
+        --color-prettylights-syntax-comment: #8b949e;
+        --color-prettylights-syntax-entity: #d2a8ff;
+        --color-prettylights-syntax-keyword: #ff7b72;
+        --fgColor-default: #f0f6fc;
+        --fgColor-muted: #8b949e;
+        --bgColor-default: #0d1117;
+      }
+
+      body {
+        margin: 30px;
+        color: var(--fgColor-default);
+        background: var(--bgColor-default);
+        font: 14px system-ui;
+      }
+
+      [data-testid="blob-header"] {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        border: 1px solid #30363d;
+      }
+
+      .markdown-body {
+        padding: 16px;
+        border: 1px solid #30363d;
+      }
+
+      .highlight-source-go pre {
+        font:
+          14px/1.6 "Cascadia Code",
+          monospace;
+        white-space: pre;
+      }
+    </style>
+  </head>
+  <body>
+    <section>
+      <h2 data-testid="screen-reader-heading">File metadata and controls</h2>
+      <div data-testid="blob-header">
+        <div data-testid="blob-header-content">
+          <strong>getting-started.md</strong>
+        </div>
+        <div class="file-actions">
+          <button
+            type="button"
+            title="More file actions"
+            data-testid="more-file-actions-button-nav-menu-wide"
+          >
+            ···
+          </button>
+        </div>
+      </div>
+      <article class="markdown-body">
+        <p id="markdown-prose">ordinary @Application text</p>
+        <div class="highlight highlight-source-go">
+          <pre
+            id="markdown-go-fence"
+          ><span class="pl-c">// @import { Application } from "github.com/spice-framework/spice/annotation/core"</span>
+<span class="pl-c">// @Application</span>
+<span class="pl-c">// @Enable(expose=["health", "readiness", "info"], access="loopback")</span>
+<span class="pl-k">func</span> main() {
+}</pre>
+        </div>
+      </article>
+    </section>
+  </body>
+</html>
