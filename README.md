@@ -19,7 +19,7 @@ The browser-neutral parser and semantic palettes live in [`packages/spice-syntax
 - Uses a restrained **Native GitHub** palette by default so annotations match Go's visual density in either GitHub theme.
 - Provides the original GoLand-inspired **Spice Vivid** palette plus complete custom semantic colors.
 - Marks detected files with the project logo beside GitHub's right-side file actions; hover text identifies it and clicking opens the Spice framework in a new tab.
-- Handles GitHub file views, pull-request diffs, and client-side navigation without duplicating rendered content.
+- Handles GitHub file views, blame, commits, compare views, pull-request diffs, review snippets, rendered markdown Go fences, and client-side navigation without duplicating rendered content.
 - Requests only Chrome's `storage` permission. There is no telemetry, remote code, or network request from the extension.
 
 ## Install locally
@@ -28,7 +28,7 @@ The browser-neutral parser and semantic palettes live in [`packages/spice-syntax
 2. Open `chrome://extensions` in Google Chrome.
 3. Enable **Developer mode**.
 4. Choose **Load unpacked** and select `build/unpacked`.
-5. Open a `.go` file containing canonical Spice declarations on GitHub.
+5. Open a `.go` file, pull-request or commit diff, or markdown document containing canonical Spice declarations on GitHub.
 
 Open the extension's **Details → Extension options** to change prefix folding or semantic colors.
 

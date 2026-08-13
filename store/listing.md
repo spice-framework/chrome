@@ -11,13 +11,13 @@
 
 Spice for GitHub makes canonical Spice declarations feel like a native part of GitHub's Go code viewer while preserving every source byte.
 
-Open a Go file or pull-request diff on GitHub and the extension recognizes valid Spice declaration comments beginning with `// @`. It visually folds the comment prefix, applies semantic highlighting aligned with GitHub's own Go palette, and places the Spice logo beside GitHub's file actions so you can identify a Spice file at a glance.
+Open a Go file, blame view, commit or pull-request diff, or a markdown document with a Go sample on GitHub and the extension recognizes valid Spice declaration comments beginning with `// @`. It visually folds the comment prefix, applies semantic highlighting aligned with GitHub's own Go palette, and places the Spice logo beside GitHub's file actions so you can identify a Spice file at a glance.
 
 Highlights:
 
 - Native GitHub light and dark syntax colors by default.
 - Optional GoLand-inspired Spice Vivid and custom semantic palettes.
-- File and pull-request diff support, including GitHub client-side navigation.
+- File, blame, commit, compare, pull-request diff, review snippet, and markdown fence support, including GitHub client-side navigation.
 - Exact source integrity: copying still returns valid Go such as `// @Application`.
 - Local-only processing with no analytics, telemetry, remote code, or hidden network requests.
 - Least privilege: the only extension permission is `storage`, used for display settings.
@@ -36,7 +36,7 @@ The GitHub organization or repository URL can become the verified official URL a
 
 ### Single purpose
 
-Improve the local presentation of canonical Spice declaration comments in GitHub Go file and pull-request diff views without modifying source content.
+Improve the local presentation of canonical Spice declaration comments in GitHub file, diff, review, and markdown code views without modifying source content.
 
 ### Permission justification: `storage`
 
@@ -44,7 +44,7 @@ Stores and, when Chrome Sync is enabled, synchronizes the user's presentation pr
 
 ### Site access justification: `https://github.com/*`
 
-The content script must run on GitHub pages to detect canonical Spice declarations in visible Go file and diff views and re-render their presentation locally. It does not transmit, retain, or sell page content, and it does not make network requests.
+The content script must run on GitHub pages to detect canonical Spice declarations in visible file, diff, review, and markdown code views and re-render their presentation locally. It does not transmit, retain, or sell page content, and it does not make network requests.
 
 ### Remote code
 
@@ -74,6 +74,7 @@ No account, paid service, or test credentials are required.
 4. Copy the `@Application` line and confirm the copied text is still `// @Application`.
 5. Hover over the Spice logo beside the right-side file controls and confirm its tooltip identifies the file as Spice.
 6. Open the extension's Details → Extension options page to verify Native GitHub, Spice Vivid, custom palette, and prefix-folding settings.
+7. Open https://github.com/spice-framework/spice/blob/main/docs/getting-started.md and confirm the Go sample's `// @` declarations receive the same presentation.
 
 ## Artwork upload order
 

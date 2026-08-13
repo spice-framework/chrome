@@ -8,8 +8,10 @@ source, copy behavior, raw views, reviews, and Git content unchanged.
 
 ## Public invariants
 
-- Only canonical `// @...` Spice syntax in `.go` blob and diff views is
-  presented as Spice code. Ordinary and malformed comments remain untouched.
+- Only canonical `// @...` Spice syntax in GitHub read-only code surfaces
+  (file blobs, blame, commit/compare/PR diffs, review snippets, and
+  markdown code fences) is presented as Spice. Ordinary and malformed
+  comments remain untouched.
 - Prefix concealment and semantic coloring are presentation only. The visible
   code line's `textContent`, GitHub's read-only source buffer, copied text, raw
   source, and repository bytes must retain the physical `// ` prefix.
@@ -20,8 +22,8 @@ source, copy behavior, raw views, reviews, and Git content unchanged.
   of truth. The extension artifact and build-time documentation renderer must
   consume that package and pass the shared language-neutral fixture corpus.
 - An icon-only Spice indicator appears beside GitHub's right-side file actions
-  only when at least one canonical Spice line is detected in the current Go
-  file or diff. Its label is exposed through accessible and hover text, and its
+  only when at least one canonical Spice line is detected in the current file
+  or diff. Its label is exposed through accessible and hover text, and its
   explicit link opens the canonical Spice repository.
 - GitHub SPA navigation and incrementally rendered diff lines must be handled
   idempotently without modifying ordinary Go syntax spans.
