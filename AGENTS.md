@@ -27,6 +27,13 @@ source, copy behavior, raw views, reviews, and Git content unchanged.
   explicit link opens the canonical Spice repository.
 - GitHub SPA navigation and incrementally rendered diff lines must be handled
   idempotently without modifying ordinary Go syntax spans.
+- Conventional physical Go paths are presented with deterministic Spice View
+  breadcrumbs and source/test/resources/generated categories. Test links point
+  to the straightforward physical production peer, and generated diff bodies
+  may be collapsed locally without changing GitHub source or review state.
+- View presentation performs no repository fetch. It must fail closed for
+  unsafe/unrelated paths and must not pretend it can discover rare explicit
+  `build.spice.go` View overrides without committed page data.
 - The extension requests only GitHub content-script access and synchronized
   settings storage. It has no telemetry, remote code, hidden network calls,
   tabs permission, browsing-history access, or source mutation capability.

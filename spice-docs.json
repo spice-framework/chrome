@@ -5,7 +5,7 @@
     "id": "github-extension",
     "title": "Spice for GitHub",
     "family": "developer-tools",
-    "summary": "A browser extension that renders canonical Spice declaration comments semantically on GitHub without changing source.",
+    "summary": "A browser extension that renders canonical Spice declaration comments and conventional View paths on GitHub without changing source.",
     "maturity": "preview",
     "audience": ["application-developer", "evaluator"]
   },

@@ -156,3 +156,58 @@
   display: block;
   border-radius: 4px;
 }
+
+.spice-view-breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  margin-inline-start: 10px;
+  gap: 6px;
+  color: var(--fgColor-muted, #656d76);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.spice-view-breadcrumb code {
+  overflow: hidden;
+  color: var(--fgColor-default, #1f2328);
+  font: inherit;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spice-view-category {
+  padding: 1px 6px;
+  color: var(--fgColor-accent, #0969da);
+  background: var(--bgColor-accent-muted, #ddf4ff);
+  border: 1px solid var(--borderColor-accent-muted, #54aeff66);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.spice-view-separator {
+  color: var(--fgColor-muted, #656d76);
+}
+
+.spice-view-source-link {
+  margin-inline-start: 4px;
+  white-space: nowrap;
+}
+
+.spice-generated-toggle {
+  width: 100%;
+  padding: 6px 12px;
+  color: var(--fgColor-muted, #656d76);
+  background: var(--bgColor-muted, #f6f8fa);
+  border: 0;
+  border-block-end: 1px solid var(--borderColor-default, #d0d7de);
+  cursor: pointer;
+  font: inherit;
+  text-align: start;
+}
+
+.spice-generated-toggle:hover,
+.spice-generated-toggle:focus-visible {
+  color: var(--fgColor-default, #1f2328);
+  background: var(--bgColor-neutral-muted, #afb8c133);
+}

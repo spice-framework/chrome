@@ -1,9 +1,10 @@
 (function initializeSpiceForGitHub() {
   "use strict";
 
-  const { SpiceSyntax, SpiceSettings } = globalThis;
+  const { SpiceSyntax, SpiceSettings, SpiceViewPaths } = globalThis;
   const RENDERED_ATTRIBUTE = "data-spice-rendered";
   const INDICATOR_CLASS = "spice-file-indicator";
+  const VIEW_BREADCRUMB_CLASS = "spice-view-breadcrumb";
   const SPICE_URL = "https://github.com/spice-framework/spice";
   const LINE_SELECTORS = [
     ".react-file-line",
@@ -283,12 +284,139 @@
 
   function scanFileContainers() {
     for (const container of fileContainers()) {
+      decorateDiffView(container);
       updateIndicator(
         container,
         findDiffIndicatorPlacement(container),
         spiceDeclarationCount(container),
       );
     }
+  }
+
+  function repositoryLocation() {
+    const segments = location.pathname.split("/").filter(Boolean);
+    if (segments.length < 2) {
+      return null;
+    }
+    return {
+      owner: segments[0],
+      repository: segments[1],
+      mode: segments[2] ?? "",
+      revision: segments[3] ?? "HEAD",
+      canonicalPath: ["blob", "blame"].includes(segments[2])
+        ? segments.slice(4).join("/")
+        : "",
+    };
+  }
+
+  function visibleSource(root) {
+    return lineCandidates(root)
+      .map((line) => line.textContent ?? "")
+      .join("\n");
+  }
+
+  function decorateBlobView() {
+    const repository = repositoryLocation();
+    if (!repository?.canonicalPath) {
+      document.querySelector(`.${VIEW_BREADCRUMB_CLASS}`)?.remove();
+      return;
+    }
+    const mapping = SpiceViewPaths.map(
+      repository.canonicalPath,
+      visibleSource(document),
+      repository.repository,
+    );
+    const host = document.querySelector('[data-testid="blob-header-content"]');
+    if (!mapping || !host) {
+      return;
+    }
+    decorateViewHost(host, document.documentElement, mapping, repository);
+  }
+
+  function decorateDiffView(container) {
+    const canonicalPath =
+      container.dataset.path ?? container.dataset.filePath ?? "";
+    const repository = repositoryLocation();
+    const mapping = SpiceViewPaths.map(
+      canonicalPath,
+      visibleSource(container),
+      repository?.repository ?? "",
+    );
+    const host = container.querySelector(
+      '.file-info, [data-testid="file-header"] .file-info',
+    );
+    if (!mapping || !host) {
+      return;
+    }
+    decorateViewHost(host, container, mapping, repository);
+    if (mapping.readOnly) {
+      installGeneratedCollapse(container);
+    }
+  }
+
+  function decorateViewHost(host, owner, mapping, repository) {
+    owner.dataset.spiceViewPath = mapping.viewPath;
+    owner.dataset.spiceViewCategory = mapping.category;
+    let breadcrumb = host.querySelector(`:scope > .${VIEW_BREADCRUMB_CLASS}`);
+    if (!breadcrumb) {
+      breadcrumb = document.createElement("span");
+      breadcrumb.className = VIEW_BREADCRUMB_CLASS;
+      breadcrumb.setAttribute("aria-label", "Spice View path");
+      host.append(breadcrumb);
+    }
+    if (breadcrumb.dataset.spiceViewPath === mapping.viewPath) {
+      return;
+    }
+    breadcrumb.dataset.spiceViewPath = mapping.viewPath;
+    breadcrumb.replaceChildren();
+    const category = document.createElement("span");
+    category.className = "spice-view-category";
+    category.textContent = mapping.category;
+    const separator = document.createElement("span");
+    separator.className = "spice-view-separator";
+    separator.textContent = "›";
+    separator.setAttribute("aria-hidden", "true");
+    const path = document.createElement("code");
+    path.textContent = mapping.viewPath;
+    breadcrumb.append(category, separator, path);
+    if (mapping.sourceCanonicalPath && repository) {
+      const source = document.createElement("a");
+      source.className = "spice-view-source-link";
+      source.href = `/${repository.owner}/${repository.repository}/blob/HEAD/${mapping.sourceCanonicalPath}`;
+      source.textContent = "Source";
+      source.title = `Open ${mapping.sourceCanonicalPath}`;
+      breadcrumb.append(source);
+    }
+  }
+
+  function installGeneratedCollapse(container) {
+    if (container.querySelector(":scope > .spice-generated-toggle")) {
+      return;
+    }
+    const header = container.querySelector(
+      '.file-header, [data-testid="file-header"]',
+    );
+    if (!header) {
+      return;
+    }
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "spice-generated-toggle";
+    toggle.textContent = "Collapse Generated Sources";
+    toggle.setAttribute("aria-expanded", "true");
+    toggle.addEventListener("click", () => {
+      const expanded = toggle.getAttribute("aria-expanded") === "true";
+      toggle.setAttribute("aria-expanded", String(!expanded));
+      toggle.textContent = expanded
+        ? "Expand Generated Sources"
+        : "Collapse Generated Sources";
+      for (const child of container.children) {
+        if (child !== header && child !== toggle) {
+          child.hidden = expanded;
+        }
+      }
+    });
+    container.insertBefore(toggle, header.nextSibling);
   }
 
   function applySettings(nextSettings) {
@@ -309,6 +437,7 @@
     }
     renderLines(document);
     renderMarkdownBlocks(document);
+    decorateBlobView();
     const containers = fileContainers();
     const blobPlacement = findBlobIndicatorPlacement();
     if (containers.length > 0) {

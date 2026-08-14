@@ -1,0 +1,7 @@
+{
+  "name": "@spice-framework/view-paths",
+  "version": "0.1.2",
+  "private": true,
+  "description": "Deterministic conventional Spice View path mapping for repository presentation.",
+  "main": "src/index.cjs"
+}

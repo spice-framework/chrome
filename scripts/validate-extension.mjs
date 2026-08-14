@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const extension = path.join(root, "extension");
 const syntaxPackage = path.join(root, "packages", "spice-syntax", "src");
+const viewPathsPackage = path.join(root, "packages", "spice-view-paths", "src");
 const manifest = JSON.parse(
   await readFile(path.join(extension, "manifest.json"), "utf8"),
 );
@@ -52,11 +53,13 @@ const expectedFiles = new Set([
   "options.js",
   "settings.js",
   "spice-syntax.js",
+  "spice-view-paths.js",
   "styles.css",
 ]);
 const sourceFiles = await listFiles(extension);
 const virtualFiles = new Map([
   ["spice-syntax.js", path.join(syntaxPackage, "index.cjs")],
+  ["spice-view-paths.js", path.join(viewPathsPackage, "index.cjs")],
   ["settings.js", path.join(syntaxPackage, "palette.cjs")],
 ]);
 const actualFiles = new Set([...sourceFiles, ...virtualFiles.keys()]);

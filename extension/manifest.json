@@ -3,7 +3,7 @@
   "name": "Spice for GitHub",
   "short_name": "Spice",
   "version": "0.1.2",
-  "description": "Render valid Spice declaration comments as native, highlighted annotations on GitHub.",
+  "description": "Present Spice annotations and conventional View paths on GitHub without changing valid Go source.",
   "minimum_chrome_version": "111",
   "icons": {
     "16": "assets/logo-16.png",
@@ -16,7 +16,12 @@
     {
       "matches": ["https://github.com/*"],
       "css": ["styles.css"],
-      "js": ["spice-syntax.js", "settings.js", "content.js"],
+      "js": [
+        "spice-syntax.js",
+        "spice-view-paths.js",
+        "settings.js",
+        "content.js"
+      ],
       "run_at": "document_idle",
       "all_frames": false,
       "world": "ISOLATED"

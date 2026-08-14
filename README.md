@@ -2,7 +2,7 @@
 
 Unified documentation: [spiceframework.dev/tools/github-extension](https://spiceframework.dev/tools/github-extension/).
 
-Spice for GitHub makes valid [Spice](https://github.com/spice-framework/spice) declaration comments read like native language annotations on GitHub. It visually folds the `// ` prefix, restores semantic syntax highlighting, and adds an icon-only Spice link beside GitHub's file actions for every detected Spice file.
+Spice for GitHub makes valid [Spice](https://github.com/spice-framework/spice) declaration comments read like native language annotations on GitHub. It visually folds the `// ` prefix, restores semantic syntax highlighting, adds an icon-only Spice link beside GitHub's file actions, and presents conventional physical Go paths through Spice View breadcrumbs.
 
 The source is never rewritten. Copying a declaration still produces valid Go such as `// @Application`, raw views stay unchanged, and GitHub's own review data remains authoritative.
 
@@ -20,7 +20,19 @@ The browser-neutral parser and semantic palettes live in [`packages/spice-syntax
 - Provides the original GoLand-inspired **Spice Vivid** palette plus complete custom semantic colors.
 - Marks detected files with the project logo beside GitHub's right-side file actions; hover text identifies it and clicking opens the Spice framework in a new tab.
 - Handles GitHub file views, blame, commits, compare views, pull-request diffs, review snippets, rendered markdown Go fences, and client-side navigation without duplicating rendered content.
+- Labels conventional files as Source, Tests, Resources, Test Resources, or
+  Generated Sources and displays their deterministic `src/main/go`,
+  `src/test/go`, resource, or generated View path.
+- Links a conventional `_test.go` file to its straightforward physical
+  production peer and provides an accessible local collapse control for
+  generated diff bodies.
 - Requests only Chrome's `storage` permission. There is no telemetry, remote code, or network request from the extension.
+
+View mapping is deliberately local and convention-only. The extension does not
+fetch an ignored Project Model or project configuration, so a rare explicit
+`build.spice.go` View override is left to the CLI and editors that can load the
+complete model. The displayed mapping never changes GitHub paths or repository
+content.
 
 ## Install locally
 

@@ -3,7 +3,7 @@
 ## Product details
 
 - **Name:** Spice for GitHub
-- **Summary:** Render valid Spice declaration comments as native, highlighted annotations on GitHub.
+- **Summary:** Present Spice annotations and conventional View paths on GitHub without changing valid Go source.
 - **Category:** Developer Tools
 - **Language:** English
 
@@ -20,6 +20,8 @@ Highlights:
 - File, blame, commit, compare, pull-request diff, review snippet, and markdown fence support, including GitHub client-side navigation.
 - Exact source integrity: copying still returns valid Go such as `// @Application`.
 - Local-only processing with no analytics, telemetry, remote code, or hidden network requests.
+- Conventional Spice View breadcrumbs, source/test/resource/generated labels,
+  test-to-source links, and locally collapsible generated diffs.
 - Least privilege: the only extension permission is `storage`, used for display settings.
 
 Spice for GitHub changes presentation only. Raw views, copied source, GitHub review data, and repository contents remain unchanged.

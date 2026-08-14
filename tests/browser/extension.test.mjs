@@ -69,6 +69,14 @@ try {
   assert.equal(await page.locator(".spice-file-indicator").count(), 1);
   assert.equal(await page.locator(".spice-file-badge").count(), 0);
   assert.equal(
+    await page.locator(".spice-view-breadcrumb code").textContent(),
+    "src/main/go/PetclinicApplication.go",
+  );
+  assert.equal(
+    await page.locator("html").getAttribute("data-spice-view-category"),
+    "Source",
+  );
+  assert.equal(
     await indicator.evaluate(
       (element) => element.nextElementSibling?.dataset.testid,
     ),
@@ -314,6 +322,47 @@ try {
       .locator('#diff-text-inner [data-spice-token="ANNOTATION"]')
       .textContent(),
     "Bean",
+  );
+  assert.equal(
+    await page
+      .locator('[data-path="main.go"] .spice-view-breadcrumb code')
+      .textContent(),
+    "src/main/go/PetclinicApplication.go",
+  );
+  assert.equal(
+    await page
+      .locator(
+        '[data-path="internal/users/user_service_test.go"] .spice-view-breadcrumb code',
+      )
+      .textContent(),
+    "src/test/go/users/application/UserServiceTest.go",
+  );
+  assert.equal(
+    await page
+      .locator(
+        '[data-path="internal/users/user_service_test.go"] .spice-view-source-link',
+      )
+      .getAttribute("href"),
+    "/spice-framework/petclinic/blob/HEAD/internal/users/user_service.go",
+  );
+  const generated = page.locator(
+    '[data-path="internal/spicegen/petclinic/application.go"]',
+  );
+  assert.equal(
+    await generated.getAttribute("data-spice-view-category"),
+    "Generated Sources",
+  );
+  assert.equal(
+    await generated.locator(".spice-view-breadcrumb code").textContent(),
+    "build/generated/spice/petclinic/application.go",
+  );
+  const generatedToggle = generated.locator(".spice-generated-toggle");
+  assert.equal(await generatedToggle.getAttribute("aria-expanded"), "true");
+  await generatedToggle.click();
+  assert.equal(await generatedToggle.getAttribute("aria-expanded"), "false");
+  assert.equal(
+    await generated.locator("#generated-diff-body").isHidden(),
+    true,
   );
 
   await page.goto(

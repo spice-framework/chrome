@@ -2,7 +2,7 @@
   "name": "spice-for-github",
   "version": "0.1.2",
   "private": true,
-  "description": "Render valid Spice declaration comments as native, highlighted annotations on GitHub.",
+  "description": "Present Spice annotations and conventional View paths on GitHub without changing valid Go source.",
   "type": "commonjs",
   "engines": {
     "node": "^22.13.0 || >=24"

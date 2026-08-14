@@ -23,5 +23,9 @@ await copyFile(
   path.join(root, "packages", "spice-syntax", "src", "palette.cjs"),
   path.join(unpacked, "settings.js"),
 );
+await copyFile(
+  path.join(root, "packages", "spice-view-paths", "src", "index.cjs"),
+  path.join(unpacked, "spice-view-paths.js"),
+);
 
 console.log(`Built unpacked extension at ${unpacked}`);
