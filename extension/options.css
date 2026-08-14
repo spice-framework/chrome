@@ -8,8 +8,8 @@
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
-  color: #f4eadf;
-  background: #090706;
+  color: #f6eeef;
+  background: #0b0708;
 }
 
 * {
@@ -20,8 +20,8 @@ body {
   min-width: 680px;
   margin: 0;
   background:
-    radial-gradient(circle at 12% 0%, rgb(192 82 28 / 20%), transparent 31rem),
-    linear-gradient(145deg, #100c09, #070606 55%);
+    radial-gradient(circle at 12% 0%, rgb(226 1 20 / 22%), transparent 31rem),
+    linear-gradient(145deg, #16090b, #070506 55%);
 }
 
 main {
@@ -38,14 +38,16 @@ main {
 }
 
 .hero img {
-  border: 1px solid #6f3218;
+  padding: 8px;
+  background: #14080a;
+  border: 1px solid #5a1018;
   border-radius: 24px;
-  box-shadow: 0 18px 60px rgb(215 99 42 / 20%);
+  box-shadow: 0 18px 60px rgb(226 1 20 / 22%);
 }
 
 .eyebrow {
   margin: 0 0 5px;
-  color: #e8894c;
+  color: #f44752;
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.15em;
@@ -71,7 +73,7 @@ h2 {
 .lede,
 .card p,
 small {
-  color: #ab9e93;
+  color: #b7a8aa;
 }
 
 .lede {
@@ -90,8 +92,8 @@ form {
   display: grid;
   gap: 22px;
   padding: 24px;
-  background: rgb(24 19 16 / 91%);
-  border: 1px solid #3f3027;
+  background: rgb(22 13 15 / 91%);
+  border: 1px solid #3a2729;
   border-radius: 18px;
   box-shadow: 0 16px 50px rgb(0 0 0 / 22%);
 }
@@ -127,7 +129,7 @@ code {
 input[type="checkbox"] {
   width: 38px;
   height: 20px;
-  accent-color: #d9772b;
+  accent-color: #e20114;
 }
 
 fieldset {
@@ -140,7 +142,7 @@ fieldset {
 
 legend {
   margin-bottom: 10px;
-  color: #d8cec5;
+  color: #eadfe0;
   font-size: 13px;
   font-weight: 700;
 }
@@ -148,19 +150,19 @@ legend {
 .choice {
   justify-content: flex-start;
   padding: 14px;
-  background: #110e0c;
-  border: 1px solid #362820;
+  background: #14090b;
+  border: 1px solid #3a1c20;
   border-radius: 12px;
   cursor: pointer;
 }
 
 .choice:has(input:checked) {
-  background: #24150e;
-  border-color: #a75427;
+  background: #2a0a0d;
+  border-color: #e20114;
 }
 
 .choice input {
-  accent-color: #d9772b;
+  accent-color: #e20114;
 }
 
 .preview-card pre {
@@ -199,8 +201,8 @@ legend {
   align-items: center;
   gap: 10px;
   padding: 9px 10px;
-  background: #110e0c;
-  border: 1px solid #30241e;
+  background: #14090b;
+  border: 1px solid #3a1c20;
   border-radius: 10px;
 }
 
@@ -216,9 +218,9 @@ legend {
 .color-field input[type="text"] {
   min-width: 0;
   padding: 7px 8px;
-  color: #eadfd4;
-  background: #090706;
-  border: 1px solid #453228;
+  color: #f6eeef;
+  background: #0b0708;
+  border: 1px solid #5a1018;
   border-radius: 7px;
   font-family: "Cascadia Code", Consolas, monospace;
   text-transform: lowercase;
@@ -233,15 +235,15 @@ footer {
 }
 
 #status {
-  color: #d7a77c;
+  color: #ff9aa0;
   font-size: 13px;
 }
 
 button {
   padding: 10px 16px;
-  color: #1a0e08;
-  background: #e18446;
-  border: 1px solid #f19d64;
+  color: #ffffff;
+  background: #e20114;
+  border: 1px solid #ff3340;
   border-radius: 9px;
   font: inherit;
   font-weight: 750;
@@ -249,14 +251,14 @@ button {
 }
 
 button:hover {
-  background: #ee955b;
+  background: #ff1a2e;
 }
 
 button.secondary {
   margin-right: 8px;
-  color: #e4d8ce;
-  background: #211914;
-  border-color: #49382d;
+  color: #eadfe0;
+  background: #211416;
+  border-color: #4a2a2e;
 }
 
 @media (max-width: 760px) {

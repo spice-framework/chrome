@@ -107,11 +107,11 @@ function promoDocument({ logoUrl, format }) {
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #f7ede3;
+        color: #f6eeef;
         background:
-          radial-gradient(circle at 18% 10%, rgb(224 101 43 / 38%), transparent 34%),
-          radial-gradient(circle at 88% 92%, rgb(117 44 18 / 28%), transparent 36%),
-          linear-gradient(145deg, #17100c, #080706 62%);
+          radial-gradient(circle at 18% 10%, rgb(226 1 20 / 38%), transparent 34%),
+          radial-gradient(circle at 88% 92%, rgb(120 8 16 / 30%), transparent 36%),
+          linear-gradient(145deg, #16090b, #070506 62%);
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       }
       .shell {
@@ -126,14 +126,16 @@ function promoDocument({ logoUrl, format }) {
       .logo {
         width: ${isSmall ? "76px" : "142px"};
         height: ${isSmall ? "76px" : "142px"};
-        border: 1px solid #7b391d;
+        padding: ${isSmall ? "6px" : "10px"};
+        background: #14080a;
+        border: 1px solid #5a1018;
         border-radius: ${isSmall ? "20px" : "34px"};
-        box-shadow: 0 22px 70px rgb(228 107 48 / 26%);
+        box-shadow: 0 22px 70px rgb(226 1 20 / 28%);
       }
-      .eyebrow { margin: 0 0 ${isSmall ? "5px" : "12px"}; color: #ef9559; font-size: ${isSmall ? "10px" : "17px"}; font-weight: 800; letter-spacing: .16em; }
+      .eyebrow { margin: 0 0 ${isSmall ? "5px" : "12px"}; color: #f44752; font-size: ${isSmall ? "10px" : "17px"}; font-weight: 800; letter-spacing: .16em; }
       h1 { margin: 0; font-size: ${isSmall ? "30px" : "59px"}; line-height: .98; letter-spacing: -.045em; }
-      .tagline { margin: ${isSmall ? "11px 0 0" : "20px 0 0"}; color: #c9b8aa; font-size: ${isSmall ? "14px" : "24px"}; line-height: 1.35; }
-      .proof { margin-top: ${isSmall ? "17px" : "30px"}; color: #e3a77d; font-size: ${isSmall ? "11px" : "16px"}; font-weight: 700; letter-spacing: .04em; }
+      .tagline { margin: ${isSmall ? "11px 0 0" : "20px 0 0"}; color: #b7a8aa; font-size: ${isSmall ? "14px" : "24px"}; line-height: 1.35; }
+      .proof { margin-top: ${isSmall ? "17px" : "30px"}; color: #ff9aa0; font-size: ${isSmall ? "11px" : "16px"}; font-weight: 700; letter-spacing: .04em; }
       .code {
         padding: 34px 38px;
         color: #f0f6fc;
